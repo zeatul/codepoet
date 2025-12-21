@@ -1,0 +1,31 @@
+pluginManagement {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+rootProject.name = 'codepoet'
+
+include 'codepoet-core'
+include 'javapoet-pro'
+include 'ddlpoet'
+include 'project-tools'
+
+dependencyResolutionManagement {
+
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name = 'Central Portal Snapshots'
+            url = 'https://central.sonatype.com/repository/maven-snapshots/'
+        }
+    }
+}
+
+

@@ -1,0 +1,23 @@
+plugins {
+    id 'buildlogic.java-library-conventions'
+}
+
+
+description = 'Think JavaPoet, but faster, more powerful, and easier to use. It\'s a Java code generator written in Java.'
+
+dependencies {
+    implementation 'io.github.zeatul:hawk-core'
+    implementation project(':codepoet-core')
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs += 'src/test/java'
+        }
+        resources {
+            srcDirs += 'src/generatedTest/resources'
+        }
+    }
+}
+

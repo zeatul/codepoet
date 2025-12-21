@@ -1,0 +1,9 @@
+plugins {
+    id 'buildlogic.java-library-conventions'
+}
+
+description = 'Provides tools for project environment'
+
+dependencies {
+    implementation 'io.github.zeatul:hawk-core'
+}

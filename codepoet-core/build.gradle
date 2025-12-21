@@ -1,0 +1,9 @@
+plugins {
+    id 'buildlogic.java-library-conventions'
+}
+
+description = 'The foundation for all CodePoet modules.'
+
+dependencies {
+    implementation ("io.github.zeatul:hawk-core")
+}
