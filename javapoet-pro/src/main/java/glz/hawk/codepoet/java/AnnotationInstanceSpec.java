@@ -121,7 +121,7 @@ public class AnnotationInstanceSpec {
             if (value instanceof Class || value instanceof ClassName) {
                 return addMember(name, "$T.class", value);
             } else if (value instanceof CharSequence) {
-                return addMember(name, "$S", argNotBlank(((CharSequence) value).toString(), "value"));
+                return addMember(name, "$S", argNotNull(((CharSequence) value).toString(), "value"));
             } else if (value instanceof Enum) {
                 Class<?> enumClass = ((Enum<?>) value).getDeclaringClass();
                 return addMember(name, "$T.$L", enumClass, ((Enum<?>) value).name());

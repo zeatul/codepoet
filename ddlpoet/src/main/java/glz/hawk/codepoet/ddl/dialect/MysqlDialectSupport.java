@@ -16,11 +16,11 @@
 
 package glz.hawk.codepoet.ddl.dialect;
 
-import glz.hawkframework.core.helper.StringHelper;
-import glz.hawk.codepoet.ddl.DatabaseCodeWriter;
 import glz.hawk.codepoet.ddl.ColumnSpec;
 import glz.hawk.codepoet.ddl.DataTypeSpec;
+import glz.hawk.codepoet.ddl.DatabaseCodeWriter;
 import glz.hawk.codepoet.ddl.TableSpec;
+import glz.hawkframework.core.helper.StringHelper;
 
 import java.io.IOException;
 import java.sql.Types;
@@ -42,8 +42,16 @@ public class MysqlDialectSupport extends AbstractDialectSupport {
         super.createTable(codeWriter, tableSpec);
         final String comment = tableSpec.comment;
         if (StringHelper.isNotBlank(comment)) {
-            codeWriter.emit("COMMENT $C", comment).emit(";");
+            codeWriter.emit(" COMMENT $C", comment);
         }
+        // customizer
+        codeWriter.indent();
+        for (String suffix : tableSpec.suffixes){
+            codeWriter.emitNewLine();
+            codeWriter.emit(suffix);
+        }
+        codeWriter.emit(";");
+        codeWriter.unindent();
         return codeWriter;
     }
 

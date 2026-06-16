@@ -1,0 +1,9 @@
+plugins {
+    id 'buildlogic.java-library-conventions'
+}
+
+description = 'Write XML in Java.'
+
+dependencies {
+    api project(':codepoet-core')
+}

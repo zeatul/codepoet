@@ -18,10 +18,11 @@ package glz.hawk.codepoet.java;
 
 import javax.lang.model.element.Modifier;
 import java.util.Arrays;
+import java.util.function.Consumer;
 
+import static glz.hawk.codepoet.java.TypeCategory.ANNOTATION;
 import static glz.hawkframework.core.support.ArgumentSupport.argElementNotNull;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
-import static glz.hawk.codepoet.java.TypeCategory.ANNOTATION;
 
 /**
  * This class is responsible for
@@ -57,6 +58,11 @@ public class AnnotationSpec extends TypeSpec {
             for (AttributeSpec attribute : argNotNull(attributes, "attributes")) {
                 addAttribute(argElementNotNull(attribute, ++index, "attributes"));
             }
+            return this;
+        }
+
+        public AnnotationSpec.Builder add(Consumer<AnnotationSpec.Builder> consumer) {
+            consumer.accept(this);
             return this;
         }
 

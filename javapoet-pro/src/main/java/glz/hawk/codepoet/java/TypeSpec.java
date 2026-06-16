@@ -16,14 +16,14 @@
 
 package glz.hawk.codepoet.java;
 
-import glz.hawkframework.core.helper.ObjectHelper;
-import glz.hawkframework.core.helper.StringHelper;
-import glz.hawkframework.core.support.StateSupport;
 import glz.hawk.codepoet.java.javacode.ComplexJavaCodeBlockBuilder;
 import glz.hawk.codepoet.java.javadoc.TypeJavadoc;
 import glz.hawk.codepoet.java.type.ClassName;
 import glz.hawk.codepoet.java.type.TypeName;
 import glz.hawk.codepoet.java.type.TypeVariableName;
+import glz.hawkframework.core.helper.ObjectHelper;
+import glz.hawkframework.core.helper.StringHelper;
+import glz.hawkframework.core.support.StateSupport;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
@@ -32,10 +32,10 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.function.Function;
 
+import static glz.hawk.codepoet.java.TypeCategory.*;
 import static glz.hawkframework.core.support.ArgumentSupport.*;
 import static glz.hawkframework.core.support.StateSupport.stateFalse;
 import static glz.hawkframework.core.support.StateSupport.stateTrue;
-import static glz.hawk.codepoet.java.TypeCategory.*;
 
 /**
  * This class is responsible for
@@ -181,7 +181,7 @@ public abstract class TypeSpec {
             if (StringHelper.isNotBlank(enumName)) {
                 codeWriter.emit(enumName);
             } else {
-                if (superClass == null){
+                if (superClass == null) {
                     throw new IllegalArgumentException("The superclass of anonymous class must not be null.");
                 }
                 codeWriter.emit("new $T", superClass);
@@ -249,6 +249,8 @@ public abstract class TypeSpec {
             if (this.modifiers.contains(Modifier.FINAL)) {
                 implicitFieldModifiers.add(Modifier.PROTECTED);
             }
+            // emit field on every other line.
+            codeWriter.emitNewLine();
             fieldSpec.emit(codeWriter, typeCategory.legalFieldModifiers, implicitFieldModifiers);
             isFirstLine = false;
         }
@@ -428,17 +430,17 @@ public abstract class TypeSpec {
             return StringHelper.isBlank(this.name);
         }
 
-        public T addElement(Element element){
+        public T addElement(Element element) {
             this.originatingElements.add(argNotNull(element, "element"));
             return (T) this;
         }
 
-        public T addElement(Element... elements){
+        public T addElement(Element... elements) {
             addElement(Arrays.asList(elements));
             return (T) this;
         }
 
-        public T addElement(Iterable<Element> elements){
+        public T addElement(Iterable<Element> elements) {
             int index = -1;
             for (Element element : argNotNull(elements, "elements")) {
                 this.originatingElements.add(argElementNotNull(element, ++index, "elements"));
@@ -648,6 +650,14 @@ public abstract class TypeSpec {
             }
             innerType.addAsMemberModifiers(list);
             this.innerTypes.add(innerType);
+            return (T) this;
+        }
+
+        public T addStaticImport(String... staticImports) {
+            for (String staticImport : staticImports) {
+                if (StringHelper.isBlank(staticImport)) throw new IllegalArgumentException("staticImport must not be blank");
+                this.staticImports.add(staticImport);
+            }
             return (T) this;
         }
 

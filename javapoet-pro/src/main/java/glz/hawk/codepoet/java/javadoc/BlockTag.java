@@ -16,9 +16,9 @@
 
 package glz.hawk.codepoet.java.javadoc;
 
-import glz.hawkframework.core.helper.StringHelper;
 import glz.hawk.codepoet.java.JavaCodeBlock;
 import glz.hawk.codepoet.java.type.ClassName;
+import glz.hawkframework.core.helper.StringHelper;
 
 import java.util.HashSet;
 import java.util.Set;

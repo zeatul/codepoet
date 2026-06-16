@@ -60,6 +60,11 @@ public class SqlFileTest {
                         .addIndexColumn(IndexColumnSpec.builder("BOOK_NAME", SortType.DEFAULT).build())
                         .addIndexColumn("BOOK_PRICE", SortType.ASC).addIndexColumn("PUBLISH_DATE", SortType.DESC)
                         .build())
+                .addSuffix("ENGINE = INNODB")
+                .addSuffix("DEFAULT CHARSET = utf8mb4")
+                .addSuffix("COLLATE = utf8mb4_bin")
+                .addSuffix("DISTRIBUTED BY LIST(APL_SAD_NO)")
+                .addSuffix("(G1 values in ('MZ'), G2 values in ('MN'))")
                 .build();
 
         TableSpec authorTable = TableSpec.builder("AUTHOR")

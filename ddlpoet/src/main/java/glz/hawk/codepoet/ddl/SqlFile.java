@@ -16,19 +16,17 @@
 
 package glz.hawk.codepoet.ddl;
 
-import glz.hawkframework.core.helper.StringHelper;
 import glz.hawk.codepoet.ddl.dialect.Dialect;
+import glz.hawkframework.core.helper.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Element;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -44,10 +42,10 @@ import static glz.hawkframework.core.support.ArgumentSupport.*;
  * @author Hawk
  */
 public class SqlFile {
-    private final Logger LOG = LoggerFactory.getLogger(SqlFile.class);
     public final DatabaseCodeBlock fileComment;
     public final DatabaseSpec databaseSpec;
     public final String packageName;
+    private final Logger LOG = LoggerFactory.getLogger(SqlFile.class);
     private final String indent;
     private final String lineSeparator;
     private final Dialect dialect;
@@ -65,39 +63,80 @@ public class SqlFile {
         this.filename = builder.filename;
     }
 
+    public Builder toBuilder() {
+        return new Builder(databaseSpec, dialect)
+            .setFilename(filename)
+            .setIndent(indent)
+            .setPackage(packageName)
+            .setLineSeparator(lineSeparator)
+            .addFileComment(fileComment)
+            .addOriginatingElements(originatingElements);
+    }
+
     public static Builder builder(DatabaseSpec databaseSpec, Dialect dialect) {
         return new Builder(databaseSpec, dialect);
     }
 
-    public void writeTo(Appendable out) throws IOException {
+    public void writeTo(Appendable out) {
         DatabaseCodeWriter codeWriter = new DatabaseCodeWriter(out, dialect, indent, lineSeparator);
         emit(codeWriter);
     }
 
-    public void writeTo(Path path) throws IOException {
+    public void writeTo(Path path) {
         argNotNull(path, "path");
-        argument(path, Files::notExists, p -> String.format("%s exists. It can't be overwritten.", p.toAbsolutePath()));
+        path = resolveOutputPath(path, true);
+        argument(path, Files::notExists, this::messageForPathExists);
         try (Writer writer = new OutputStreamWriter(Files.newOutputStream(path), StandardCharsets.UTF_8)) {
             writeTo(writer);
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
-    public void writeTo(File file) throws IOException {
-        argNotNull(file, "file");
-        argument(file.toPath(), Files::notExists, p -> String.format("%s exists. It can't be overwritten.", p.toAbsolutePath()));
-        try (Writer writer = new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8)) {
-            writeTo(writer);
+    public void writeTo(File directory) {
+        writeTo(argNotNull(directory, "directory").toPath());
+    }
+
+    public Path resolveOutputPath(@Nonnull Path path, boolean createDirectory) {
+        argNotNull(path, "path");
+        argument(path, Files::exists, this::messageForPathNotExist);
+        argument(path, Files::isDirectory, this::messageForPathIsNotDirectory);
+        if (StringHelper.isNotBlank(packageName)) {
+            for (String packagePart : packageName.split("\\.")) {
+                path = path.resolve(packagePart);
+            }
+            if (createDirectory) {
+                try {
+                    Files.createDirectories(path);
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }
         }
+        path = path.resolve(filename);
+        return path;
+    }
+
+    private String messageForPathNotExist(Path path) {
+        return String.format("%s doesn't exist.", path.toAbsolutePath());
+    }
+
+    private String messageForPathIsNotDirectory(Path path) {
+        return String.format("%s isn't a directory.", path.toAbsolutePath());
+    }
+
+    private String messageForPathExists(Path path) {
+        return String.format("%s exists.", path.toAbsolutePath());
     }
 
     public void writeTo(Filer filer) {
         FileObject filerSourceFile = null;
         Writer writer = null;
         try {
-            argNotBlank(packageName,packageName);
-            argNotBlank(filename,"filename");
-            filerSourceFile = filer.createResource(StandardLocation.CLASS_OUTPUT,packageName,filename,this.originatingElements.toArray(new Element[0]));
-             writer = filerSourceFile.openWriter();
+            argNotBlank(packageName, packageName);
+            argNotBlank(filename, "filename");
+            filerSourceFile = filer.createResource(StandardLocation.CLASS_OUTPUT, packageName, filename, this.originatingElements.toArray(new Element[0]));
+            writer = filerSourceFile.openWriter();
             writeTo(writer);
         } catch (Exception e) {
             if (filerSourceFile != null) {
@@ -123,22 +162,26 @@ public class SqlFile {
         }
     }
 
-    private void emit(DatabaseCodeWriter codeWriter) throws IOException {
-        if (!fileComment.isEmpty()) {
-            codeWriter.emit(fileComment);
-            codeWriter.emitNewLine();
+    private void emit(DatabaseCodeWriter codeWriter) {
+        try {
+            if (!fileComment.isEmpty()) {
+                codeWriter.emit(fileComment);
+                codeWriter.emitNewLine();
+            }
+            databaseSpec.emit(codeWriter);
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
-        databaseSpec.emit(codeWriter);
     }
 
     public static final class Builder {
         private final DatabaseSpec databaseSpec;
         private final Dialect dialect;
         private final DatabaseCodeBlock.Builder fileCommentBuilder = DatabaseCodeBlock.builder();
+        private final List<Element> originatingElements = new ArrayList<>();
         private String indent = StringHelper.repeatChar(' ', 4);
         private String lineSeparator = "\n";
         private String packageName;
-        private final List<Element> originatingElements = new ArrayList<>();
         private String filename;
 
         private Builder(DatabaseSpec databaseSpec, Dialect dialect) {
@@ -170,6 +213,7 @@ public class SqlFile {
             this.packageName = argNotBlank(packageName, "packageName");
             return this;
         }
+
         public Builder addOriginatingElement(Element originatingElement) {
             this.originatingElements.add(argNotNull(originatingElement, "originatingElement"));
             return this;
@@ -188,8 +232,8 @@ public class SqlFile {
             return this;
         }
 
-        public Builder setFilename(String filename){
-            this.filename = argNotBlank(filename,"filename");
+        public Builder setFilename(String filename) {
+            this.filename = argNotBlank(filename, "filename");
             return this;
         }
 
@@ -197,6 +241,5 @@ public class SqlFile {
             //TODO:校验
             return new SqlFile(this);
         }
-
     }
 }

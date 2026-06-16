@@ -19,6 +19,7 @@ package glz.hawk.codepoet.java.javadoc;
 import glz.hawk.codepoet.java.JavaCodeBlock;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
@@ -33,6 +34,11 @@ public abstract class AbstractDocFlow<C extends AbstractDocFlow<C>> {
 
     public AbstractDocFlow(JavaCodeBlock.Builder codeBlockBuilder) {
         this.codeBlockBuilder = argNotNull(codeBlockBuilder, "codeBlockBuilder");
+    }
+
+    public C addDoc(Consumer<JavaCodeBlock.Builder> consumer) {
+        consumer.accept(codeBlockBuilder);
+        return current();
     }
 
     public C addDoc(String format, Object... args) {

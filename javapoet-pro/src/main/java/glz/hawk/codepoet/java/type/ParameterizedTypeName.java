@@ -19,9 +19,7 @@ package glz.hawk.codepoet.java.type;
 import glz.hawkframework.core.helper.ObjectHelper;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -86,8 +84,8 @@ public class ParameterizedTypeName implements TypeName {
 
     @Nonnull
     @Override
-    public List<String> imports() {
-        List<String> result = new ArrayList<>(rawType.imports());
+    public Set<String> imports() {
+        Set<String> result = new HashSet<>(rawType.imports());
         typeArguments.stream().map(TypeName::imports).forEach(result::addAll);
         return result;
     }

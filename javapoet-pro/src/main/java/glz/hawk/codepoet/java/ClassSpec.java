@@ -24,9 +24,10 @@ import glz.hawk.codepoet.java.type.TypeVariableName;
 import javax.annotation.Nullable;
 import javax.lang.model.element.Modifier;
 import java.lang.reflect.Type;
+import java.util.function.Consumer;
 
-import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 import static glz.hawk.codepoet.java.TypeCategory.CLASS;
+import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
 /**
  * This class is responsible for
@@ -218,6 +219,11 @@ public class ClassSpec extends TypeSpec {
         @Override
         public ClassSpec.Builder addMethods(Iterable<MethodSpec> methodSpecs) {
             return super.addMethods(methodSpecs);
+        }
+
+        public ClassSpec.Builder add(Consumer<ClassSpec.Builder> consumer) {
+            consumer.accept(this);
+            return this;
         }
 
         public ClassSpec build() {

@@ -16,9 +16,9 @@
 
 package glz.hawk.codepoet.ddl.dialect;
 
-import glz.hawk.codepoet.ddl.DatabaseCodeWriter;
 import glz.hawk.codepoet.ddl.ColumnSpec;
 import glz.hawk.codepoet.ddl.DataTypeSpec;
+import glz.hawk.codepoet.ddl.DatabaseCodeWriter;
 import glz.hawk.codepoet.ddl.TableSpec;
 
 import java.io.IOException;
@@ -38,7 +38,16 @@ public class OracleDialectSupport extends AbstractDialectSupport {
 
     @Override
     public DatabaseCodeWriter createTable(DatabaseCodeWriter codeWriter, TableSpec tableSpec) throws IOException {
-        return super.createTable(codeWriter, tableSpec).emit(";");
+        super.createTable(codeWriter, tableSpec);
+        // customizer
+        codeWriter.indent();
+        for (String suffix : tableSpec.suffixes){
+            codeWriter.emitNewLine();
+            codeWriter.emit(suffix);
+        }
+        codeWriter.emit(";");
+        codeWriter.unindent();
+        return codeWriter;
     }
 
     @Override

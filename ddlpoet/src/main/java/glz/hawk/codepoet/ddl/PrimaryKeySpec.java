@@ -49,8 +49,11 @@ public class PrimaryKeySpec {
             this.name = argNotBlank(name, "name");
         }
 
-        public Builder addIndexColumns(IndexColumnSpec indexColumnSpec) {
-            indexColumnSpecs.add(argNotNull(indexColumnSpec, "indexColumnSpec"));
+        public Builder addIndexColumns(IndexColumnSpec... indexColumnSpecs) {
+            argNotEmpty(indexColumnSpecs, "indexColumnSpecs");
+            for (int i = 0; i < indexColumnSpecs.length; i++) {
+                this.indexColumnSpecs.add(argNotNull(indexColumnSpecs[i], String.format("indexColumnSpecs[%d]", i)));
+            }
             return this;
         }
 

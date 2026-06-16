@@ -18,12 +18,16 @@ package glz.hawk.codepoet.ddl;
 
 import java.sql.Types;
 
+import static glz.hawkframework.core.support.ArgumentSupport.argNotBlank;
+
 /**
  * This class is responsible for
  *
  * @author Hawk
  */
 public class DataTypeSpec {
+
+    public final static int  PROVIDED_TYPE = Integer.MIN_VALUE; //指定名称的DataTypeSpec
     public final static DataTypeSpec CLOB = clobBuilder().build();
     public final static DataTypeSpec BLOB = blobBuilder().build();
     public final static DataTypeSpec DATE = dateBuilder().build();
@@ -32,12 +36,18 @@ public class DataTypeSpec {
     public final int length;
     public final int precision;
     public final int scale;
+    public final String typeName;
 
     private DataTypeSpec(Builder builder) {
         this.type = builder.type;
         this.length = builder.length;
         this.precision = builder.precision;
         this.scale = builder.scale;
+        this.typeName = builder.typeName;
+    }
+
+    public static DataTypeSpec ofTypeName(String typeName) {
+        return new Builder(typeName).build();
     }
 
     public static DataTypeSpec ofChar(int length) {
@@ -64,7 +74,7 @@ public class DataTypeSpec {
         return timestampBuilder(precision).build();
     }
 
-     private static Builder clobBuilder() {
+    private static Builder clobBuilder() {
         return new Builder(Types.CLOB, 0, 0, 0);
     }
 
@@ -96,17 +106,31 @@ public class DataTypeSpec {
         return new Builder(Types.TIMESTAMP, 0, precision, 0);
     }
 
+    private static Builder typeNameBuilder(String typeName){
+        return new Builder(typeName);
+    }
+
     public static final class Builder {
         private final int type;
         private final int length;
         private final int precision;
         private final int scale;
+        private final String typeName;
 
         private Builder(int type, int length, int precision, int scale) {
             this.type = type;
             this.length = length;
             this.precision = precision;
             this.scale = scale;
+            this.typeName = null;
+        }
+
+        private Builder(String typeName) {
+            this.type = PROVIDED_TYPE;
+            this.length = -1;
+            this.precision = -1;
+            this.scale = -1;
+            this.typeName = argNotBlank(typeName, "typeName");
         }
 
         public DataTypeSpec build() {

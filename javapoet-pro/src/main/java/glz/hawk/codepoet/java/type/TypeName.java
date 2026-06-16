@@ -18,7 +18,7 @@ package glz.hawk.codepoet.java.type;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 /**
  * This class is responsible for
@@ -30,8 +30,8 @@ public interface TypeName {
     String keyword();
 
     @Nonnull
-    default List<String> imports() {
-        return Collections.emptyList();
+    default Set<String> imports() {
+        return Collections.emptySet();
     }
 
 }

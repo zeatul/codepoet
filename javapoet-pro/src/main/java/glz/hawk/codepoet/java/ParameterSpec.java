@@ -25,9 +25,9 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.*;
 
+import static glz.hawk.codepoet.java.type.ClassName.ofClass;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotBlank;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
-import static glz.hawk.codepoet.java.type.ClassName.ofClass;
 
 /**
  * This class is responsible for

@@ -20,11 +20,11 @@ import glz.hawkframework.core.helper.StringHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static glz.hawkframework.core.support.ArgumentSupport.argNotBlank;
-import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
+import static glz.hawkframework.core.support.ArgumentSupport.*;
 
 /**
  * This class is responsible for
@@ -38,6 +38,7 @@ public class TableSpec {
     public final PrimaryKeySpec primaryKeySpec;
     public final List<ColumnSpec> columnSpecs;
     public final List<IndexSpec> indexSpecs;
+    public final List<String> suffixes ; // 在表定义语句的末尾提供额外的属性
 
 
     private TableSpec(Builder builder) {
@@ -46,6 +47,7 @@ public class TableSpec {
         this.primaryKeySpec = builder.primaryKeySpec;
         this.columnSpecs = Collections.unmodifiableList(builder.columnSpecs);
         this.indexSpecs = Collections.unmodifiableList(builder.indexSpecs);
+        this. suffixes = Collections.unmodifiableList(builder.suffixes);
     }
 
     public static Builder builder(String name) {
@@ -56,8 +58,8 @@ public class TableSpec {
         //create a title
         String tag = "==============================================================";
         codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
-        String title = String.format(" Table: %s",name);
-        codeWriter.emit("/*").emit(title).emit(StringHelper.repeatChar(' ',tag.length()-title.length())).emit("*/").emitNewLine();
+        String title = String.format(" Table: %s", name);
+        codeWriter.emit("/*").emit(title).emit(StringHelper.repeatChar(' ', tag.length() - title.length())).emit("*/").emitNewLine();
         codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
 
         //drop table
@@ -98,6 +100,7 @@ public class TableSpec {
         private final List<IndexSpec> indexSpecs = new ArrayList<>();
         private String comment;
         private PrimaryKeySpec primaryKeySpec;
+        private final List<String> suffixes = new ArrayList<>();
 
         private Builder(String name) {
             //TODO:校验表的名字是否符合sql规范
@@ -135,6 +138,20 @@ public class TableSpec {
 
         public Builder setPrimaryKey(String... columnNames) {
             this.primaryKeySpec = PrimaryKeySpec.builder(String.format("PK_%s", name)).addIndexColumns(columnNames).build();
+            return this;
+        }
+
+        public Builder addSuffix(String suffix) {
+            this.suffixes.add(argNotBlank(suffix, "suffix"));
+            return this;
+        }
+
+        public Builder addSuffixes(String... suffixes) {
+            return addSuffixes(Arrays.asList(suffixes));
+        }
+
+        public Builder addSuffixes(List<String> suffixes) {
+            this.suffixes.addAll(argNoBlankElement(suffixes, "suffixes"));
             return this;
         }
 

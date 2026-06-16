@@ -17,8 +17,6 @@
 package glz.hawk.codepoet.java.test;
 
 import glz.hawk.codepoet.java.*;
-import glz.hawk.codepoet.java.type.*;
-import glz.hawk.codepoet.java.support.aaa.Worker;
 import glz.hawk.codepoet.java.javadoc.ConstructorJavadoc;
 import glz.hawk.codepoet.java.javadoc.FieldJavadoc;
 import glz.hawk.codepoet.java.javadoc.FileJavadoc;
@@ -26,12 +24,14 @@ import glz.hawk.codepoet.java.javadoc.TypeJavadoc;
 import glz.hawk.codepoet.java.support.Book;
 import glz.hawk.codepoet.java.support.HelloClass;
 import glz.hawk.codepoet.java.support.State;
+import glz.hawk.codepoet.java.support.aaa.Worker;
 import glz.hawk.codepoet.java.support.annotations.Display;
 import glz.hawk.codepoet.java.support.annotations.DisplayAndLength;
 import glz.hawk.codepoet.java.support.annotations.Length;
 import glz.hawk.codepoet.java.support.enums.Level;
 import glz.hawk.codepoet.java.support.interfaces.Ordered;
 import glz.hawk.codepoet.java.support.interfaces.Summary;
+import glz.hawk.codepoet.java.type.*;
 import org.junit.jupiter.api.Test;
 
 import javax.lang.model.element.Modifier;

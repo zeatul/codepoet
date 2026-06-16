@@ -16,7 +16,6 @@
 
 package glz.hawk.codepoet.java;
 
-import glz.hawkframework.core.helper.ObjectHelper;
 import glz.hawk.codepoet.core.AbstractCodeWriter;
 import glz.hawk.codepoet.java.javadoc.BlockTag;
 import glz.hawk.codepoet.java.javadoc.BlockTagType;
@@ -24,6 +23,7 @@ import glz.hawk.codepoet.java.javadoc.Javadoc;
 import glz.hawk.codepoet.java.type.ClassName;
 import glz.hawk.codepoet.java.type.TypeName;
 import glz.hawk.codepoet.java.type.TypeVariableName;
+import glz.hawkframework.core.helper.ObjectHelper;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

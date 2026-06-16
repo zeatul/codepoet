@@ -5,6 +5,5 @@ plugins {
 description = 'Database-agnostic DDL generation in Java.'
 
 dependencies {
-    implementation 'io.github.zeatul:hawk-core'
-    implementation project(':codepoet-core')
+    api project(':codepoet-core')
 }

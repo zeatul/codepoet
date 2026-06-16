@@ -36,7 +36,6 @@ public enum Dialect implements DialectSupport {
     private final static Map<String, Dialect> map = new HashMap<>();
 
     static {
-
         map.put(ORACLE.name().toLowerCase(), ORACLE);
         map.put(MYSQL.name().toLowerCase(), MYSQL);
     }
@@ -48,9 +47,8 @@ public enum Dialect implements DialectSupport {
     }
 
     public static Dialect parse(String dialectName) {
-        return Optional.of(map.get(argNotBlank(dialectName, "dialectName")))
+        return Optional.ofNullable(map.get(argNotBlank(dialectName, "dialectName")))
             .orElseThrow(() -> new IllegalStateException("Found no Dialect matched the dialectName: " + dialectName));
-
     }
 
     @Override

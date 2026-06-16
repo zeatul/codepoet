@@ -20,9 +20,7 @@ import glz.hawkframework.core.helper.ObjectHelper;
 
 import javax.annotation.Nonnull;
 import javax.lang.model.type.WildcardType;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
@@ -76,8 +74,8 @@ public class WildcardTypeName implements TypeName {
 
     @Nonnull
     @Override
-    public List<String> imports() {
-        List<String> imports = new ArrayList<>();
+    public Set<String> imports() {
+        Set<String> imports = new HashSet<>();
         this.upperBounds.stream().map(TypeName::imports).forEach(imports::addAll);
         this.lowerBounds.stream().map(TypeName::imports).forEach(imports::addAll);
         return imports;

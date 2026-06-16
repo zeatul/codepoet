@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -125,6 +126,11 @@ public class JavaCodeBlock extends AbstractCodeBlock {
 
         public Builder unindent() {
             this.formatParts.add("$<");
+            return this;
+        }
+
+        public Builder add(Consumer<Builder> consumer) {
+            consumer.accept(this);
             return this;
         }
 

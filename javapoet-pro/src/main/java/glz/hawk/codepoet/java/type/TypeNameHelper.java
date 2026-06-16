@@ -25,9 +25,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 import static glz.hawk.codepoet.java.type.PrimitiveTypeName.*;
 import static glz.hawk.codepoet.java.type.VoidTypeName.VOID;
+import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
 /**
  * This class is responsible for

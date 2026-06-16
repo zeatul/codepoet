@@ -16,9 +16,9 @@
 
 package glz.hawk.codepoet.ddl;
 
+import static glz.hawk.codepoet.ddl.SortType.DEFAULT;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotBlank;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
-import static glz.hawk.codepoet.ddl.SortType.DEFAULT;
 
 /**
  * This class is responsible for

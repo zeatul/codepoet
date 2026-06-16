@@ -5,5 +5,5 @@ plugins {
 description = 'Provides tools for project environment'
 
 dependencies {
-    implementation 'io.github.zeatul:hawk-core'
+    api 'io.github.zeatul:hawk-core'
 }

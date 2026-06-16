@@ -21,6 +21,8 @@ import glz.hawk.codepoet.java.type.TypeVariableName;
 
 import javax.lang.model.element.Modifier;
 
+import java.util.function.Consumer;
+
 import static glz.hawk.codepoet.java.TypeCategory.INTERFACE;
 
 /**
@@ -101,6 +103,11 @@ public class InterfaceSpec extends TypeSpec {
         @Override
         public InterfaceSpec.Builder addMethods(Iterable<MethodSpec> methodSpecs) {
             return super.addMethods(methodSpecs);
+        }
+
+        public InterfaceSpec.Builder add(Consumer<InterfaceSpec.Builder> consumer) {
+            consumer.accept(this);
+            return this;
         }
 
         public InterfaceSpec build() {

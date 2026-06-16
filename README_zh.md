@@ -4,16 +4,30 @@
 
 ---
 
-# hawk-java-generator
+# codepoet
 
-`hawk-java-generator` 是一个用来生成 `.java` source files的JAVA API工具包.
+`codepoet`提供了多种语言的代码生成工具：
+
+1. 👉<kbd>[ddlpoet](#ddlpoet "点击跳转到目标部分")</kbd>：用java写严格的ddl语句。
+2. 👉<kbd>[javapoet-pro](#javapoet-pro  "点击跳转到目标部分")</kbd>：用java写优美的java代码。
+
+---
+
+# ddlpoet
+
+---
+
+# javapoet-pro
+
+`javapoet-pro` 是一个用来生成 `.java` source files的JAVA API工具包.
 
 代码生成对于注解处理器，对于基于元素据生成代码的场合有奇效，特别是有企业级数组字典，接口规范，数据模型的场景。
-通过代码生成，只要维护元数据，就可以随时生成优秀的代码。结合[JAVA注解模型API包](https://)可以大大提高项目的可读性，规范性，和扩展能力。
+通过代码生成，只要维护元数据，就可以随时生成优秀的代码。结合[JAVA注解模型API包](https://github.com/zeatul/jdesigner)
+可以大大提高项目的可读性，规范性，和扩展能力。
 
-`hawk-java-generator`参考了优秀的[square/javapoet](https://github.com/square/javapoet)
+`javapoet-pro`参考了优秀的[square/javapoet](https://github.com/square/javapoet)
 项目，该项目已经[不再维护](https://github.com/square/javapoet/discussions/866)。\
-`hawk-java-generator`是更好的`javapoet`:
+`javapoet-pro`是更好的`javapoet`:
 
 - 优化了java代码生成的效率。
 - 自动处理引用和静态引用的碰撞问题。
@@ -26,7 +40,7 @@
 Gradle:
 
 ```groovy
-implementation 'io.github.zeatul:hawk-java-generator:<version>'
+implementation 'io.github.zeatul:javapoet-pro:<version>'
 implementation 'io.github.zeatul:hawk-core::<version>'
 ```
 
@@ -36,7 +50,7 @@ Maven:
 
 <dependency>
     <groupId>io.github.zeatul</groupId>
-    <artifactId>hawk-java-generator</artifactId>
+    <artifactId>javapoet-pro</artifactId>
     <version>$version$</version>
 </dependency>
 ```
@@ -92,13 +106,13 @@ public class HelloWorldGenerator {
 
 ## 代码与控制流
 
-`hawk-java-generator`的API尽可能采用不可变Java对象。同时，它还结合了建造者模式、链式调用，可变参数和lambda表达式，以使API更易于使用。
-hawk-java-generator为类（`ClassSpec`）、接口（`InterfaceSpec`）、枚举（`EnumSpec`）、注解（`AnnotationSpec`）、
+`javapoet-pro`的API尽可能采用不可变Java对象。同时，它还结合了建造者模式、链式调用，可变参数和lambda表达式，以使API更易于使用。
+javapoet-pro为类（`ClassSpec`）、接口（`InterfaceSpec`）、枚举（`EnumSpec`）、注解（`AnnotationSpec`）、
 字段（`FieldSpec`）、方法（`MethodSpec`）、构造函数（`ConstructorSpec`）、参数（`ParameterSpec`）、注解实例（
 `AnnotationInstanceSpec`）
 、javadoc（`FileJavaDoc`, `TypeJavaDoc`, `FieldJavaDoc`, `MethodJavaDoc`, `ConstructorJavaDoc`）提供了相应的模型。
 
-对于方法和构造函数的方法体，以及javadoc的内容，`hawk-java-generator`提供了格式化字符串，缩进，换行API和控制流模型来帮助生成代码。
+对于方法和构造函数的方法体，以及javadoc的内容，`javapoet-pro`提供了格式化字符串，缩进，换行API和控制流模型来帮助生成代码。
 你将发现写法和直接写java代码的方式几乎一摸一样。
 
 ### for 循环
@@ -142,9 +156,9 @@ int sum(int[][] a) {
 
 通过`addCode`方法来添加实际代码（分号需要手动添加），通过`addIndent`和`removeIndent`方法来控制缩进，通过`addNewLine`方法来换行。
 
-#### 代码格式由`hawk-java-generator`控制
+#### 代码格式由`javapoet-pro`控制
 
-这是一个由`hawk-java-generator`来控制代码格式的示例
+这是一个由`javapoet-pro`来控制代码格式的示例
 
 ```java
 MethodSpec sum = MethodSpec.builder(PrimitiveTypeName.INT, "sum")
@@ -417,7 +431,7 @@ public void readFile(File file) {
 
 ### 占位符
 
-为了方便格式化字符串的输出， `hawk-java-generator`参照`JavaPoet`，提供了类似String.format("template", parameters...)
+为了方便格式化字符串的输出， `javapoet-pro`参照`JavaPoet`，提供了类似String.format("template", parameters...)
 的功能。\
 目前提供了如下几种类型的占位符：
 
@@ -435,11 +449,11 @@ public void readFile(File file) {
 
 使用`$T`来作为java类型的占位符，它在输出时，会被替换为对应的参数表示类型的名称，同时会记录该类型的完整名称，作为将来计算类引用的依据。
 `$T`仅仅支持用来表达类型的参数：`java.lang.Class`，`javax.lang.model.type.TypeMirror`，`javax.lang.model.element.Element`，
-`java.lang.reflect.Type`，`hawk-java-generator`的自有类型`type.glz.hawk.poet.java.TypeName`以及其子类。
+`java.lang.reflect.Type`，`javapoet-pro`的自有类型`type.glz.hawk.poet.java.TypeName`以及其子类。
 
 #### $N指代名字
 
-使用`$N`来作为`hawk-java-generator`内部特定类型的占位符，它在输出时，会被替换为对应的类型的名称属性的值。\
+使用`$N`来作为`javapoet-pro`内部特定类型的占位符，它在输出时，会被替换为对应的类型的名称属性的值。\
 `$N`仅仅支持`TypeSpec`，`FieldSpec`，`MethodSpec`，`ParameterSpec`和`java.lang.CharSequence`。
 
 这是一个演示所有占位符用法的例子：
@@ -559,15 +573,15 @@ I ate 4 apples.
 
 ### 基础类型
 
-`type.glz.hawk.poet.java.PrimitiveTypeName`是一个枚举类，用来映射java的基础类型。
+`glz.hawk.codepoet.java.type.PrimitiveTypeName`是一个枚举类，用来映射java的基础类型。
 
 ### void类型
 
-`type.glz.hawk.poet.java.VoidTypeName`是一个枚举类，用来映射java的void类型。
+`glz.hawk.codepoet.java.type.VoidTypeName`是一个枚举类，用来映射java的void类型。
 
 ### 类类型
 
-`type.glz.hawk.poet.java.ClassName`对应于java类。\
+`glz.hawk.codepoet.java.type.ClassName`对应于java类。\
 提供了如下几个静态工厂方法用来构造ClassName：
 
 ```java
@@ -584,12 +598,12 @@ public static ClassName ofGuess(String classNameString);
 
 ### 参数化类类型
 
-`type.glz.hawk.poet.java.ParameterizedTypeName`对应于带类型参数的类，支持java语法允许的所有类型参数。\
+`glz.hawk.codepoet.java.type.ParameterizedTypeName`对应于带类型参数的类，支持java语法允许的所有类型参数。\
 提供了如下几个静态工厂用来构造ParameterizedTypeName：
 
 ```java
-import type.glz.hawk.poet.java.ClassName;
-import type.glz.hawk.poet.java.TypeName;
+import glz.hawk.codepoet.java.type.ClassName;
+import glz.hawk.codepoet.java.type.TypeName;
 
 public static ParameterizedTypeName of(ClassName rawType, List<TypeName> typeArguments);
 
@@ -602,7 +616,7 @@ public static ParameterizedTypeName of(Class<?> rawType, Class<?>... typeArgumen
 
 ### 数组类型
 
-`type.glz.hawk.poet.java.ArrayTypeName`对应于数组，支持任意类型的数组，包括多维数组。\
+`glz.hawk.codepoet.java.type.ArrayTypeName`对应于数组，支持任意类型的数组，包括多维数组。\
 提供了如下几个静态工厂用来构造ArrayTypeName：
 
 ```java
@@ -619,7 +633,7 @@ public static ArrayTypeName ofClass(Class<?> clazz);
 
 ### 类型变量
 
-`type.glz.hawk.poet.java.TypeVariableName`用来支持泛型所需的类型参数。\
+`glz.hawk.codepoet.java.type.TypeVariableName`用来支持泛型所需的类型参数。\
 提供了如下几个静态工厂用来构造TypeVariableName：
 
 ```java
@@ -640,7 +654,7 @@ public static TypeVariableName of(TypeVariable typeVariable);
 
 ### 通配符类型
 
-`type.glz.hawk.poet.java.WildcardTypeName`用来支持通配符类型。\
+`glz.hawk.codepoet.java.type.WildcardTypeName`用来支持通配符类型。\
 提供了如下几个静态工厂用来构造WildcardTypeName：
 
 ```java
@@ -676,40 +690,40 @@ import java.util.List;
 import java.util.Map;
 
 ClassSpec classSpec = ClassSpec.builder("TypeExample", Modifier.PUBLIC, Modifier.ABSTRACT)
-        .addTypeVariable(TypeVariableName.of("K"))
-        .addField(PrimitiveTypeName.DOUBLE, "d1", Modifier.STATIC)
-        .addField(PrimitiveTypeName.FLOAT, "f1", Modifier.STATIC)
-        .addField(LocalDateTime.class, "dateTime", Modifier.PUBLIC, Modifier.STATIC)
-        .addField(ClassName.ofClass(LocalDate.class), "date")
-        .addField(ClassName.ofGuess(LocalTime.class.getCanonicalName()), "time")
-        .addField(ClassName.of("java.util", "Map", "Entry"), "entry")
-        .addField(TypeVariableName.of("K"), "k", Modifier.PRIVATE)
-        .addField(ParameterizedTypeName.of(List.class, TypeVariableName.of("K")), "ks", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.of()), "ks1", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofUpper(Serializable.class)), "ks2", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofLower(Serializable.class)), "ks3", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), WildcardTypeName.of()), "map1", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), ParameterizedTypeName.of(Map.class, ClassName.ofClass(Integer.class), WildcardTypeName.ofUpper(TypeVariableName.of("K")))), "map2", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(TypeVariableName.of("K")), "array1", Modifier.PUBLIC)
-        .addField(PrimitiveTypeName.INT, "intA", Modifier.PUBLIC)
-        .addField(Integer.class, "integerA", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT), "intArray", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT)), "intArrayArray", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofClass(Integer.class), "integerArray", Modifier.PUBLIC)
-        .addMethod(MethodSpec.builder(VoidTypeName.VOID, "method0", Modifier.PUBLIC, Modifier.ABSTRACT).build())
-        .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method1", Modifier.PROTECTED, Modifier.ABSTRACT)
-                .addTypeVariable(TypeVariableName.of("H"))
-                .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
-                .build())
-        .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method2", Modifier.PROTECTED, Modifier.ABSTRACT)
-                .addTypeVariable(TypeVariableName.of("H"))
-                .addTypeVariable(TypeVariableName.of("V"))
-                .addTypeVariable(TypeVariableName.of("E", Throwable.class))
-                .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
-                .addParameter(TypeVariableName.of("V"), "v", Modifier.FINAL)
-                .addThrowable(TypeVariableName.of("E"))
-                .build())
-        .build();
+    .addTypeVariable(TypeVariableName.of("K"))
+    .addField(PrimitiveTypeName.DOUBLE, "d1", Modifier.STATIC)
+    .addField(PrimitiveTypeName.FLOAT, "f1", Modifier.STATIC)
+    .addField(LocalDateTime.class, "dateTime", Modifier.PUBLIC, Modifier.STATIC)
+    .addField(ClassName.ofClass(LocalDate.class), "date")
+    .addField(ClassName.ofGuess(LocalTime.class.getCanonicalName()), "time")
+    .addField(ClassName.of("java.util", "Map", "Entry"), "entry")
+    .addField(TypeVariableName.of("K"), "k", Modifier.PRIVATE)
+    .addField(ParameterizedTypeName.of(List.class, TypeVariableName.of("K")), "ks", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.of()), "ks1", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofUpper(Serializable.class)), "ks2", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofLower(Serializable.class)), "ks3", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), WildcardTypeName.of()), "map1", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), ParameterizedTypeName.of(Map.class, ClassName.ofClass(Integer.class), WildcardTypeName.ofUpper(TypeVariableName.of("K")))), "map2", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(TypeVariableName.of("K")), "array1", Modifier.PUBLIC)
+    .addField(PrimitiveTypeName.INT, "intA", Modifier.PUBLIC)
+    .addField(Integer.class, "integerA", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT), "intArray", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT)), "intArrayArray", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofClass(Integer.class), "integerArray", Modifier.PUBLIC)
+    .addMethod(MethodSpec.builder(VoidTypeName.VOID, "method0", Modifier.PUBLIC, Modifier.ABSTRACT).build())
+    .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method1", Modifier.PROTECTED, Modifier.ABSTRACT)
+        .addTypeVariable(TypeVariableName.of("H"))
+        .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
+        .build())
+    .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method2", Modifier.PROTECTED, Modifier.ABSTRACT)
+        .addTypeVariable(TypeVariableName.of("H"))
+        .addTypeVariable(TypeVariableName.of("V"))
+        .addTypeVariable(TypeVariableName.of("E", Throwable.class))
+        .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
+        .addParameter(TypeVariableName.of("V"), "v", Modifier.FINAL)
+        .addThrowable(TypeVariableName.of("E"))
+        .build())
+    .build();
 ```
 
 这是生成的代码：
@@ -770,7 +784,6 @@ public T addStaticImport(ClassName className, String... names);
 
 ```java
 ClassSpec classSpec = ClassSpec.builder("StaticImportDemo", Modifier.PUBLIC)
-    .addStaticImport(PrimitiveTypeName.class, "*")
     .addStaticImport(PrimitiveTypeName.BOOLEAN)
     .addStaticImport(PrimitiveTypeName.class, "INT", "LONG")
     .addStaticImport(ClassName.ofClass(PrimitiveTypeName.class), "CHAR", "DOUBLE")
@@ -781,11 +794,11 @@ ClassSpec classSpec = ClassSpec.builder("StaticImportDemo", Modifier.PUBLIC)
 
 ```java
 
-import static type.glz.hawk.poet.java.PrimitiveTypeName.BOOLEAN;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.CHAR;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.DOUBLE;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.INT;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.LONG;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.BOOLEAN;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.CHAR;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.DOUBLE;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.INT;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.LONG;
 
 public class StaticImportDemo {
 }
@@ -804,8 +817,8 @@ public class StaticImportDemo {
 import glz.hawk.codepoet.java.ClassSpec;
 import glz.hawk.codepoet.java.FieldSpec;
 import glz.hawk.codepoet.java.JavaFile;
-import type.glz.hawk.poet.java.ArrayTypeName;
-import type.glz.hawk.poet.java.ParameterizedTypeName;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ParameterizedTypeName;
 
 import javax.annotation.Nonnull;
 
@@ -814,20 +827,20 @@ import java.util.Map;
 import static javax.lang.model.element.Modifier.*;
 
 FieldSpec fieldSpec1 = FieldSpec.builder(String.class, "name", PRIVATE)
-        .setJavadoc("This is a field javadoc example.")
-        .build();
+    .setJavadoc("This is a field javadoc example.")
+    .build();
 
 FieldSpec fieldSpec2 = FieldSpec.builder(ArrayTypeName.ofTypeName(INT), "numbers", PUBLIC, STATIC)
-        .setInitializer("new $T[]{$L, $L, $L}", INT, 1, 2, 3)
-        .addAnnotation(Nonnull.class)
-        .build();
+    .setInitializer("new $T[]{$L, $L, $L}", INT, 1, 2, 3)
+    .addAnnotation(Nonnull.class)
+    .build();
 
 ClassSpec classSpec = ClassSpec.builder("FieldDemo", PUBLIC)
-        .addField(fieldSpec1)
-        .addField(fieldSpec2)
-        .addField(ParameterizedTypeName.of(Map.class, String.class, Object.class), "map", PRIVATE)
-        .addField(String.class, "str2", PROTECTED)
-        .build();
+    .addField(fieldSpec1)
+    .addField(fieldSpec2)
+    .addField(ParameterizedTypeName.of(Map.class, String.class, Object.class), "map", PRIVATE)
+    .addField(String.class, "str2", PROTECTED)
+    .build();
 ```
 
 这是生成的代码
@@ -858,7 +871,7 @@ public class FieldDemo {
 
 ```java
 
-import type.glz.hawk.poet.java.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
 
 import javax.annotation.Nonnull;
 
@@ -867,28 +880,28 @@ import static javax.lang.model.element.Modifier.*;
 ParameterSpec param1 = ParameterSpec.builder(String.class, "name").build();
 ParameterSpec param2 = ParameterSpec.builder(String.class, "unmodifiableName", FINAL).build();
 ParameterSpec param3 = ParameterSpec.builder(String.class, "simpleName")
-        .addAnnotation(Nonnull.class)
-        .build();
+    .addAnnotation(Nonnull.class)
+    .build();
 
 MethodSpec method1 = MethodSpec.builder(String.class, "search1", PUBLIC, ABSTRACT)
-        .addParameters(param1, param2, param3)
-        .build();
+    .addParameters(param1, param2, param3)
+    .build();
 
 MethodSpec method2 = MethodSpec.builder(String.class, "search2", PUBLIC, ABSTRACT)
-        .addParameter(String.class, "name", FINAL)
-        .build();
+    .addParameter(String.class, "name", FINAL)
+    .build();
 
 MethodSpec method3 = MethodSpec.builder(String.class, "search3", PUBLIC, ABSTRACT)
-        .addParameter(String.class, "firstName")
-        .addParameter(ArrayTypeName.ofClass(String.class), "names")
-        .varargs()
-        .build();
+    .addParameter(String.class, "firstName")
+    .addParameter(ArrayTypeName.ofClass(String.class), "names")
+    .varargs()
+    .build();
 
 ClassSpec classSpec = ClassSpec.builder("ParameterDemo", PUBLIC, ABSTRACT)
-        .addMethod(method1)
-        .addMethod(method2)
-        .addMethod(method3)
-        .build();
+    .addMethod(method1)
+    .addMethod(method2)
+    .addMethod(method3)
+    .build();
 ```
 
 这是生成的代码：
@@ -905,46 +918,50 @@ public abstract class ParameterDemo {
 }
 ```
 
-不仅可以用`ParameterSpec.Builder`定义参数，再添加到方法定义中，也可以直接通过提供类型，变量名称和修饰符的快捷方式直接添加参数到方法定义中。\
+不仅可以用`ParameterSpec.Builder`
+定义参数，再添加到方法定义中，也可以直接通过提供类型，变量名称和修饰符的快捷方式直接添加参数到方法定义中。\
 定义可变参数：方法的最后一个参数必须是数组，同时还要调用`varargs()`告诉`MethodSpec`最后一个参数是可变参数。
 
 ## 定义方法
+
 `MethodSpec`负责维护方法的返回类型、名称、参数、异常、修饰符、注解、方法体和注释。\
 这是一个`MethodSpec`的用法示例：
+
 ```java
 MethodSpec method1 = MethodSpec.builder(VOID, "getValue", PUBLIC, ABSTRACT)
-                .addParameter(String.class, "key")
-                .build();
+    .addParameter(String.class, "key")
+    .build();
 
 MethodSpec method2 = MethodSpec.builder(INT, "sum", PUBLIC)
-        .addParameter(INT, "a")
-        .addParameter(INT, "b")
-        .beginMethodBody()
-        .addStatement("return a + b")
-        .end()
-        .build();
+    .addParameter(INT, "a")
+    .addParameter(INT, "b")
+    .beginMethodBody()
+    .addStatement("return a + b")
+    .end()
+    .build();
 
 MethodJavadoc methodJavadoc = MethodJavadoc.builder()
-        .addBlockTag(BlockTag.builder(BlockTagType.PARAM,"file").add("the file to be read.").build())
-        .addBlockTag(BlockTag.builder(BlockTagType.RETURN).add("the content of file.").build())
-        .addBlockTag(BlockTag.builder(IOException.class).add("if met error while read file").build())
-        .beginJavadoc()
-        .addDocument("read a file")
-        .end()
-        .build();
+    .addBlockTag(BlockTag.builder(BlockTagType.PARAM, "file").add("the file to be read.").build())
+    .addBlockTag(BlockTag.builder(BlockTagType.RETURN).add("the content of file.").build())
+    .addBlockTag(BlockTag.builder(IOException.class).add("if met error while read file").build())
+    .beginJavadoc()
+    .addDocument("read a file")
+    .end()
+    .build();
 
 MethodSpec method3 = MethodSpec.builder(String.class, "readFile", PUBLIC, ABSTRACT)
-        .addParameter(File.class, "file")
-        .addThrowable(IOException.class)
-        .setJavadoc(methodJavadoc)
-        .build();
+    .addParameter(File.class, "file")
+    .addThrowable(IOException.class)
+    .setJavadoc(methodJavadoc)
+    .build();
 
 ClassSpec classSpec = ClassSpec.builder("MethodDemo", PUBLIC, ABSTRACT)
-        .addMethod(method1)
-        .addMethod(method2)
-        .addMethod(method3)
-        .build();
+    .addMethod(method1)
+    .addMethod(method2)
+    .addMethod(method3)
+    .build();
 ```
+
 这是生成的代码：
 
 ```java
@@ -971,22 +988,627 @@ public abstract class MethodDemo {
 
 ## 定义构造函数
 
+`ConstructorSpec`负责维护构造函数的参数、异常、修饰符、注解、方法体和注释。\
+这是一个`ConstructorSpec`的用法示例：
+
+```java
+FieldSpec nameField = FieldSpec.builder(String.class, "name", PRIVATE).build();
+FieldSpec ageField = FieldSpec.builder(Integer.class, "age", PRIVATE).build();
+ConstructorSpec constructor1 = ConstructorSpec.builder(PUBLIC)
+    .addParameter(String.class, "name")
+    .addParameter(Integer.class, "age")
+    .beginConstructorBody()
+    .addStatement("this.name = name")
+    .addStatement(("this.age = age"))
+    .end()
+    .build();
+ConstructorSpec constructor2 = ConstructorSpec.builder(PUBLIC)
+    .beginConstructorBody()
+    .addStatement("this($S, $L)", "Hello World", 1)
+    .end()
+    .build();
+ClassSpec classSpec = ClassSpec.builder("ConstructorDemo", PUBLIC)
+    .addField(nameField)
+    .addField(ageField)
+    .addConstructor(constructor1)
+    .addConstructor(constructor2)
+    .build();
+```
+
+这是生成的代码：
+
+```java
+public class ConstructorDemo {
+    private String name;
+    private Integer age;
+
+    public ConstructorDemo(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public ConstructorDemo() {
+        this("Hello World", 1);
+    }
+}
+```
+
 ### 定义接口
+
+`InterfaceSpec`负责维护接口的名称、修饰符、类型变量、静态类变量、内部类、父接口、方法、注解和注释。\
+这是一个`InterfaceSpec`的用法示例：
+
+```java
+InterfaceSpec interfaceSpec = InterfaceSpec.builder("IShape", Modifier.PUBLIC)
+    .addTypeVariable(TypeVariableName.of("T"))
+    .addSuperInterface(Serializable.class)
+    .addSuperInterface(Cloneable.class)
+    .addField(FieldSpec.builder(String.class, "type").setInitializer("$S", "SHAPE").build())
+    .addMethod(MethodSpec.builder(INT, "sidesCount").build())
+    .addMethod(MethodSpec.builder(INT, "interiorAngleSum", Modifier.DEFAULT)
+        .beginMethodBody()
+        .addStatement("return (sidesCount() - 2) * 180")
+        .end()
+        .build())
+    .build();
+```
+
+这是生成的代码：
+
+```java
+import java.io.Serializable;
+
+public interface IShape<T> extends Serializable, Cloneable {
+    String type = "SHAPE";
+
+    int sidesCount();
+
+    default int interiorAngleSum() {
+        return (sidesCount() - 2) * 180;
+    }
+}
+```
 
 ### 定义类
 
+`ClassSpec`负责维护类的名称、修饰符、类型变量、类变量、初始化块、内部类、父类、实现的接口、方法、构造函数、注解和注释。\
+这是一个`ClassSpec`的用法示例：
+
+```java
+package hawk.demo;
+
+import glz.hawk.codepoet.java.*;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ClassName;
+import glz.hawk.codepoet.java.type.ParameterizedTypeName;
+import hawk.util.ProjectUtils;
+
+import javax.lang.model.element.Modifier;
+import java.io.IOException;
+import java.util.function.Consumer;
+
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.INT;
+import static glz.hawk.codepoet.java.type.VoidTypeName.VOID;
+
+public class ClassGenerator {
+    private final String packageName;
+
+    public ClassGenerator(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void generateClass() {
+
+        // Mammal annotation
+        ProjectUtils.write(packageName,
+            AnnotationSpec.builder("Mammal", Modifier.PUBLIC)
+                .build()
+        );
+
+        // Mammal annotation
+        ProjectUtils.write(packageName,
+            AnnotationSpec.builder("Tag", Modifier.PUBLIC)
+                .build()
+        );
+
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            InterfaceSpec.builder("Movable", Modifier.PUBLIC)
+                .addMethod(MethodSpec.builder(INT, "getSpeed").build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType").build())
+                .build()
+        );
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            InterfaceSpec.builder("Audible", Modifier.PUBLIC)
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel").build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType").build())
+                .build()
+        );
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Animal", Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addField(FieldSpec.builder(String.class, "animalType", Modifier.PRIVATE, Modifier.FINAL).build())
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .addParameter(String.class, "animalType")
+                    .beginConstructorBody()
+                    .addStatement("this.animalType = animalType")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getAnimalType", Modifier.PUBLIC)
+                    .beginMethodBody()
+                    .addStatement("return animalType")
+                    .end()
+                    .build())
+                .build()
+        );
+
+        // cat
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Cat", Modifier.PUBLIC)
+                .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Mammal")).build())
+                .setSuperClass(ClassName.of(packageName, "Animal"))
+                .addSuperInterfaces(ClassName.of(packageName, "Movable"), ClassName.of(packageName, "Audible"))
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .beginConstructorBody()
+                    .addStatement("super($S)", "CAT")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 55")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getSpeed", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 12")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "meow")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "walk")
+                    .end()
+                    .build())
+                .addInnerType(ClassSpec.builder("LittleCat")
+                        .addField(FieldSpec.builder(String.class, "COLOR", Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                            .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Tag")).build())
+                            .setInitializer("$S", "BLACK AND WHITE")
+                            .build())
+                        .addField(FieldSpec.builder(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")), "consumer")
+                            .setInitializer("$L", ClassSpec.anonymousBuilder()
+                                .setSuperClass(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")))
+                                .addMethod(MethodSpec.builder(VOID, "accept", Modifier.PUBLIC)
+                                    .addParameter(ClassName.of(packageName, "Cat"), "cat")
+                                    .beginMethodBody()
+                                    .addStatement("System.out.println(cat.getSpeed())")
+                                    .end()
+                                    .build())
+                                .build())
+                            .build())
+                        .addMethod(MethodSpec.builder(String.class, "favorite", Modifier.PUBLIC)
+                            .addParameter(String.class, "toyType")
+                            .addParameter(ArrayTypeName.ofClass(String.class), "toys")
+                            .varargs()
+                            .beginMethodBody()
+                            .addStatement("return toyType + $S + String.join($S, toys)", ": ", ", ")
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "save", Modifier.PUBLIC)
+                            .addThrowable(IOException.class)
+                            .beginMethodBody()
+                            .addStatement("throw new $T()", IOException.class)
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "playWith", Modifier.PUBLIC)
+                            .addParameter(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")), "consumer")
+                            .beginMethodBody()
+                            .addStatement("consumer.accept(new $T())", ClassName.of(packageName, "Cat"))
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "play", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("playWith($L)", ClassSpec.anonymousBuilder()
+                                .setSuperClass(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")))
+                                .addMethod(MethodSpec.builder(VOID, "accept", Modifier.PUBLIC)
+                                    .addParameter(ClassName.of(packageName, "Cat"), "cat")
+                                    .beginMethodBody()
+                                    .addStatement("System.out.println(cat.getSpeed())")
+                                    .end()
+                                    .build())
+                                .build())
+                            .end()
+                            .build())
+                        .build()
+                    , Modifier.PUBLIC, Modifier.STATIC)
+                .build()
+        );
+
+        // dog
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Dog", Modifier.PUBLIC)
+                .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Mammal")).build())
+                .setSuperClass(ClassName.of(packageName, "Animal"))
+                .addSuperInterfaces(ClassName.of(packageName, "Movable"), ClassName.of(packageName, "Audible"))
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .beginConstructorBody()
+                    .addStatement("super($S)", "DOG")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 25")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getSpeed", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 22")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "woof")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "walk")
+                    .end()
+                    .build())
+                .build()
+        );
+    }
+}
+```
+
+这是生成的代码：
+
+```java
+public @interface Tag {
+}
+
+public @interface Mammal {
+}
+
+public interface Movable {
+    int getSpeed();
+
+    String getMovementType();
+}
+
+public interface Audible {
+    int getVolumeLevel();
+
+    String getSoundType();
+}
+
+abstract public class Animal {
+    private final String animalType;
+
+    public Animal(String animalType) {
+        this.animalType = animalType;
+    }
+
+    public String getAnimalType() {
+        return animalType;
+    }
+}
+
+@Mammal
+public class Dog extends Animal implements Movable, Audible {
+    public Dog() {
+        super("DOG");
+    }
+
+    @Override
+    public int getVolumeLevel() {
+        return 25;
+    }
+
+    @Override
+    public int getSpeed() {
+        return 22;
+    }
+
+    @Override
+    public String getSoundType() {
+        return "woof";
+    }
+
+    @Override
+    public String getMovementType() {
+        return "walk";
+    }
+}
+
+@Mammal
+public class Cat extends Animal implements Movable, Audible {
+    public Cat() {
+        super("CAT");
+    }
+
+    @Override
+    public int getVolumeLevel() {
+        return 55;
+    }
+
+    @Override
+    public int getSpeed() {
+        return 12;
+    }
+
+    @Override
+    public String getSoundType() {
+        return "meow";
+    }
+
+    @Override
+    public String getMovementType() {
+        return "walk";
+    }
+
+    static public class LittleCat {
+        @Tag
+        public final static String COLOR = "BLACK AND WHITE";
+        Consumer<Cat> consumer = new Consumer<Cat>() {
+            public void accept(Cat cat) {
+                System.out.println(cat.getSpeed());
+            }
+        };
+
+        public String favorite(String toyType, String... toys) {
+            return toyType + ": " + String.join(", ", toys);
+        }
+
+        public void save() throws IOException {
+            throw new IOException();
+        }
+
+        public void playWith(Consumer<Cat> consumer) {
+            consumer.accept(new Cat());
+        }
+
+        public void play() {
+            playWith(new Consumer<Cat>() {
+                public void accept(Cat cat) {
+                    System.out.println(cat.getSpeed());
+                }
+            });
+        }
+    }
+}
+```
+
+这个示例定义了注解Tag和Mammal、接口Movable和Audible、抽象类Animal和最终的实现类Dog和Cat。
+Cat类还带了一个内部类LittleCat，展示了匿名内部类的实现技巧。
+
 #### 定义类初始化块
 
-#### 定义静态类初始化块
+`ClassSpec`提供了beginInstanceInitializer()方法来书写实例变量的初始化块代码，
+还提供了beginStaticInitializer()方法来书写静态变量的初始化块代码。\
+这是用法示例：
+
+```java
+ClassSpec classSpec = ClassSpec.builder("ClassDemo", PUBLIC)
+    .addField(String.class, "name", PRIVATE)
+    .addField(Integer.class, "age", PRIVATE)
+    .beginInstanceInitializer()
+    .addStatement("this.name = $S", "Dog")
+    .addStatement("this.age = 100")
+    .end()
+    .addField(Integer.class, "MAX_AGE", PRIVATE, STATIC)
+    .beginStaticInitializer()
+    .addStatement("MAX_AGE = 10000")
+    .end()
+    .build();
+```
+
+这是生成的代码
+
+```java
+public class ClassDemo {
+    private String name;
+    private Integer age;
+    private static Integer MAX_AGE;
+
+    static {
+        MAX_AGE = 10000;
+    }
+
+    {
+        this.name = "Dog";
+        this.age = 100;
+    }
+}
+```
 
 ### 定义枚举
+
+`EnumSpec`负责维护枚举的名称、修饰符、枚举量、类型变量、类变量、初始化块、内部类、实现的接口、方法、构造函数、注解和注释。\
+这是一个示例，生成最简单的枚举类，仅仅包含枚举量和其对应的javadoc：
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Speed", Modifier.PUBLIC)
+    .addEnumConstant("SLOW", ClassSpec.anonymousBuilder().setJavadoc("speed < 50 km/s").build())
+    .addEnumConstant("MEDIUM", ClassSpec.anonymousBuilder().setJavadoc("speed >= 50 km/s & speed < 00 km/s").build())
+    .addEnumConstant("FAST", ClassSpec.anonymousBuilder().setJavadoc("speed >= 50 km/s & speed < 00 km/s").build())
+    .build();
+```
+
+这是生成的代码：
+
+```java
+public enum Speed {
+    /**
+     * speed < 50 km/s
+     */
+    SLOW,
+    /**
+     * speed >= 50 km/s & speed < 00 km/s
+     */
+    MEDIUM,
+    /**
+     * speed >= 50 km/s & speed < 00 km/s
+     */
+    FAST
+}
+```
+
+这是一个示例，生成的枚举类，包含枚举量，枚举量赋值，构造函数，公共方法：
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Priority", Modifier.PUBLIC)
+    .addEnumConstant("HIGHEST", "$L, $S", 9, "highest")
+    .addEnumConstant("HIGH", "$L, $S", 7, "high")
+    .addEnumConstant("MEDIUM", "$L, $S", 5, "medium")
+    .addEnumConstant("LOW", "$L, $S", 3, "low")
+    .addEnumConstant("LOWEST", "$L, $S", 1, "lowest")
+    .addEnumConstant("OTHER", ClassSpec.anonymousBuilder("$L, $S", 0, "other").setJavadoc("Other").build())
+    .addField(String.class, "name", Modifier.FINAL)
+    .addField(int.class, "level", Modifier.FINAL)
+    .addConstructor(ConstructorSpec.builder()
+        .addParameter(INT, "level")
+        .addParameter(String.class, "name")
+        .beginConstructorBody()
+        .addStatement("this.name = name")
+        .addStatement("this.level = level")
+        .end()
+        .build())
+    .addMethod(MethodSpec.builder(String.class, "getName")
+        .beginMethodBody()
+        .addStatement("return name")
+        .end().build())
+    .addMethod(MethodSpec.builder(INT, "getLevel")
+        .beginMethodBody()
+        .addStatement("return level")
+        .end().build())
+    .build();
+```
+
+这是生成的代码：
+
+```java
+public enum Priority {
+    HIGHEST(9, "highest"),
+    HIGH(7, "high"),
+    MEDIUM(5, "medium"),
+    LOW(3, "low"),
+    LOWEST(1, "lowest"),
+    /**
+     * Other
+     */
+    OTHER(0, "other");
+
+    final String name;
+    final int level;
+
+    Priority(int level, String name) {
+        this.name = name;
+        this.level = level;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getLevel() {
+        return level;
+    }
+}
+
+```
+
+这是一个示例，生成枚举类，包含抽象方法，构造函数：
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Shape", Modifier.PUBLIC)
+    .addEnumConstant("TRIANGLE",
+            ClassSpec.anonymousBuilder("$S", "triangle")
+                    .setJavadoc("The sum of the interior angles of a triangle is 180 degrees")
+                    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("return 3")
+                            .end().build())
+                    .build())
+    .addEnumConstant("RECTANGLE",
+            ClassSpec.anonymousBuilder("$S", "rectangle")
+                    .setJavadoc("The sum of the interior angles of a rectangle is 360 degrees")
+                    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("return 4")
+                            .end().build())
+                    .build())
+    .addField(String.class, "name", Modifier.FINAL)
+    .addConstructor(ConstructorSpec.builder()
+            .addParameter(String.class, "name")
+            .beginConstructorBody()
+            .addStatement("this.name = name")
+            .end()
+            .build())
+    .addMethod(MethodSpec.builder(String.class, "getName", Modifier.PUBLIC)
+            .beginMethodBody()
+            .addStatement("return name")
+            .end()
+            .build())
+    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC, Modifier.ABSTRACT).build())
+    .build();
+```
+
+这是生成的代码：
+
+```java
+public enum Shape {
+    /**
+     * The sum of the interior angles of a triangle is 180 degrees
+     */
+    TRIANGLE("triangle") {
+        public int sidesCount() {
+            return 3;
+        }
+    },
+    /**
+     * The sum of the interior angles of a rectangle is 360 degrees
+     */
+    RECTANGLE("rectangle") {
+        public int sidesCount() {
+            return 4;
+        }
+    };
+
+    final String name;
+
+    Shape(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public abstract int sidesCount();
+}
+```
 
 ### 定义注解
 
 ### 定义泛型
 
-
-
+### 定义带注解的类型：AnnotatedTypeName
 
 ### 定义内部类
 

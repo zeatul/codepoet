@@ -1,0 +1,16 @@
+<Project language="java">
+    <Developer id="101010">
+        <name><![CDATA[
+            Hawk<>12
+            Hawk13
+            Hawk14
+        ]]></name>
+        <email>fenris@hotmail.com</email>
+        <empty1 hello="x" hello2="x"/>
+        <empty2 hello="x"/>
+    </Developer>
+    <empty11/>
+    <empty12/>
+    <empty13/>
+    <empty14/>
+</Project>

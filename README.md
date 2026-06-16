@@ -1,15 +1,26 @@
 ## Choose your favorite language
 
 [English](#) | [中文](README_zh.md)
+---
+
+# codepoet
+
+`codepoet` provides code generation tools for multiple languages:
+
+1. 👉<kbd>[ddlpoet](#ddlpoet "Click to jump to the target section.")</kbd>: Write strict DDL statements in Java.
+2. 👉<kbd>[javapoet-pro](#javapoet-pro  "Click to jump to the target section.")</kbd>: Write elegant Java code in Java.
 
 ---
 
-`hawk-java-generator` is a Java API for generating `.java` source files.
+# ddlpoet
+---
+
+`javapoet-pro` is a Java API for generating `.java` source files.
 
 Source code generation is highly effective for annotation processors and metadata-driven scenarios,
 especially in contexts involving enterprise-grade reference data, interface specifications, and data models.
 With code generation, you can generate qualified code on demand by maintaining just the metadata.
-Combined with the [Java Annotation Processing API](https://),
+Combined with the [Java Annotation Processing API](https://github.com/zeatul/jdesigner),
 it significantly enhances a project's readability, standardization, and extensibility.
 
 This repo is forked from the excellent [square/javapoet](https://github.com/square/javapoet) project which
@@ -27,7 +38,7 @@ It's a better `javapoet`:
 Gradle:
 
 ```groovy
-implementation 'io.github.zeatul:hawk-java-generator:<version>'
+implementation 'io.github.zeatul:javapoet-pro:<version>'
 implementation 'io.github.zeatul:hawk-core::<version>'
 ```
 
@@ -37,7 +48,7 @@ Maven:
 
 <dependency>
     <groupId>io.github.zeatul</groupId>
-    <artifactId>hawk-java-generator</artifactId>
+    <artifactId>javapoet-pro</artifactId>
     <version>$version$</version>
 </dependency>
 ```
@@ -54,7 +65,7 @@ public class HelloWorld {
 }
 ```
 
-And this is a `HelloWorldGenerator` class that uses `hawk-java-generator` to generate the aforementioned `HelloWorld`
+And this is a `HelloWorldGenerator` class that uses `javapoet-pro` to generate the aforementioned `HelloWorld`
 class:
 
 ```java
@@ -96,14 +107,14 @@ and finally output the class to the console via JavaFile (it can also be written
 
 ## Code & Control Flow
 
-The API of `hawk-java-generator` predominantly employs immutable Java objects. It also incorporates the builder pattern,
+The API of `javapoet-pro` predominantly employs immutable Java objects. It also incorporates the builder pattern,
 method chaining, varargs, and lambda expressions to ensure user-friendly API design.
 It provides corresponding models for classes (`ClassSpec`), interfaces (`InterfaceSpec`), enums (`EnumSpec`),
 annotations (`AnnotationSpec`), fields (`FieldSpec`), methods (`MethodSpec`), constructors (`ConstructorSpec`),
 parameters (`ParameterSpec`), annotation instances (`AnnotationInstanceSpec`), and hierarchical Javadoc
 models (`FileJavaDoc`, `TypeJavaDoc`, `FieldJavaDoc`, `MethodJavaDoc`, `ConstructorJavaDoc`).
 
-For method bodies, constructor bodies, and Javadoc content, hawk-java-generator provides format strings,
+For method bodies, constructor bodies, and Javadoc content, javapoet-pro provides format strings,
 indentation, line break APIs, and control flow models to assist in generating well-structured code.
 You'll find its syntax is nearly identical to writing Java code directly.
 
@@ -150,9 +161,9 @@ Use the `addCode` method to add actual code blocks (semicolons must be manually 
 the `addIndent` and `removeIndent` methods to control indentation levels,
 and the `addNewLine` method to insert line breaks.
 
-#### Code formatting is controlled by `hawk-java-generator`
+#### Code formatting is controlled by `javapoet-pro`
 
-Here is an example demonstrating how code formatting is controlled by `hawk-java-generator`
+Here is an example demonstrating how code formatting is controlled by `javapoet-pro`
 
 ```java
 MethodSpec sum = MethodSpec.builder(PrimitiveTypeName.INT, "sum")
@@ -430,7 +441,7 @@ It's useful for writing the code like (...), {...}, ({...})
 
 ### placeholder
 
-To simplify the output of formatted strings, hawk-java-generator references JavaPoet and provides functionality similar
+To simplify the output of formatted strings, javapoet-pro references JavaPoet and provides functionality similar
 to String.format("template with placeholders", parameters...).
 
 The following types of placeholders are currently supported:
@@ -457,11 +468,11 @@ During output, it will be replaced with the name of the type represented by the 
 while simultaneously recording the fully qualified name of the type for future class reference resolution.
 `$T` exclusively supports parameters that represent types:`java.lang.Class`, `javax.lang.model.type.TypeMirror`,
 `javax.lang.model.element.Element`, `java.lang.reflect.Type`,
-and type `type.glz.hawk.poet.java.TypeName` along with its subclasses in `hawk-java-generator` project.
+and type `type.glz.hawk.poet.java.TypeName` along with its subclasses in `javapoet-pro` project.
 
 #### $N for Names
 
-Use $N as a placeholder for specific internal types in hawk-java-generator.
+Use $N as a placeholder for specific internal types in javapoet-pro.
 During output, it will be replaced with the value of the name attribute of the corresponding type.
 `$N` only supports `TypeSpec`, `FieldSpec`, `MethodSpec`, `ParameterSpec`, and `java.lang.CharSequence`.
 
@@ -588,15 +599,15 @@ The variable type supports all types in Java syntax, used to define variables, p
 
 ### primitive type
 
-`type.glz.hawk.poet.java.PrimitiveTypeName` is an enum class used to map Java's primitive types.
+`glz.hawk.codepoet.java.type.PrimitiveTypeName` is an enum class used to map Java's primitive types.
 
 ### void type
 
-`type.glz.hawk.poet.java.VoidTypeName` is an enum class used to map Java's void type.
+`glz.hawk.codepoet.java.type.VoidTypeName` is an enum class used to map Java's void type.
 
 ### class type
 
-`type.glz.hawk.poet.java.ClassName` corresponds to a Java class.\
+`glz.hawk.codepoet.java.type.ClassName` corresponds to a Java class.\
 It provides the following static factory methods to construct a ClassName:
 
 ```java
@@ -613,7 +624,7 @@ public static ClassName ofGuess(String classNameString);
 
 ### parameterized clas type
 
-`type.glz.hawk.poet.java.ParameterizedTypeName` corresponds to a class with type parameters
+`glz.hawk.codepoet.java.type.ParameterizedTypeName` corresponds to a class with type parameters
 and supports all those permitted by Java syntax.\
 It provides the following static factory methods to construct a ParameterizedTypeName：
 
@@ -632,7 +643,7 @@ public static ParameterizedTypeName of(Class<?> rawType, Class<?>... typeArgumen
 
 ### array type
 
-`type.glz.hawk.poet.java.ArrayTypeName` corresponds to arrays and supports arrays of any type, including
+`glz.hawk.codepoet.java.type.ArrayTypeName` corresponds to arrays and supports arrays of any type, including
 multidimensional arrays.\
 It provides the following static factory methods to construct an ArrayTypeName：
 
@@ -650,7 +661,7 @@ public static ArrayTypeName ofClass(Class<?> clazz);
 
 ### type variable
 
-`type.glz.hawk.poet.java.TypeVariableName` is used to support type parameters required for generics.\
+`glz.hawk.codepoet.java.type.TypeVariableName` is used to support type parameters required for generics.\
 It provides the following static factory methods to construct a typeVariableName：
 
 ```java
@@ -671,7 +682,7 @@ public static TypeVariableName of(TypeVariable typeVariable);
 
 ### wildcard type
 
-`type.glz.hawk.poet.java.WildcardTypeName` is used to support wildcard types.\
+`glz.hawk.codepoet.java.type.WildcardTypeName` is used to support wildcard types.\
 It provides the following static factory methods to construct a WildcardTypeName：
 
 ```java
@@ -707,40 +718,40 @@ import java.util.List;
 import java.util.Map;
 
 ClassSpec classSpec = ClassSpec.builder("TypeExample", Modifier.PUBLIC, Modifier.ABSTRACT)
-        .addTypeVariable(TypeVariableName.of("K"))
-        .addField(PrimitiveTypeName.DOUBLE, "d1", Modifier.STATIC)
-        .addField(PrimitiveTypeName.FLOAT, "f1", Modifier.STATIC)
-        .addField(LocalDateTime.class, "dateTime", Modifier.PUBLIC, Modifier.STATIC)
-        .addField(ClassName.ofClass(LocalDate.class), "date")
-        .addField(ClassName.ofGuess(LocalTime.class.getCanonicalName()), "time")
-        .addField(ClassName.of("java.util", "Map", "Entry"), "entry")
-        .addField(TypeVariableName.of("K"), "k", Modifier.PRIVATE)
-        .addField(ParameterizedTypeName.of(List.class, TypeVariableName.of("K")), "ks", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.of()), "ks1", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofUpper(Serializable.class)), "ks2", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofLower(Serializable.class)), "ks3", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), WildcardTypeName.of()), "map1", Modifier.PUBLIC)
-        .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), ParameterizedTypeName.of(Map.class, ClassName.ofClass(Integer.class), WildcardTypeName.ofUpper(TypeVariableName.of("K")))), "map2", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(TypeVariableName.of("K")), "array1", Modifier.PUBLIC)
-        .addField(PrimitiveTypeName.INT, "intA", Modifier.PUBLIC)
-        .addField(Integer.class, "integerA", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT), "intArray", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofTypeName(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT)), "intArrayArray", Modifier.PUBLIC)
-        .addField(ArrayTypeName.ofClass(Integer.class), "integerArray", Modifier.PUBLIC)
-        .addMethod(MethodSpec.builder(VoidTypeName.VOID, "method0", Modifier.PUBLIC, Modifier.ABSTRACT).build())
-        .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method1", Modifier.PROTECTED, Modifier.ABSTRACT)
-                .addTypeVariable(TypeVariableName.of("H"))
-                .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
-                .build())
-        .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method2", Modifier.PROTECTED, Modifier.ABSTRACT)
-                .addTypeVariable(TypeVariableName.of("H"))
-                .addTypeVariable(TypeVariableName.of("V"))
-                .addTypeVariable(TypeVariableName.of("E", Throwable.class))
-                .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
-                .addParameter(TypeVariableName.of("V"), "v", Modifier.FINAL)
-                .addThrowable(TypeVariableName.of("E"))
-                .build())
-        .build();
+    .addTypeVariable(TypeVariableName.of("K"))
+    .addField(PrimitiveTypeName.DOUBLE, "d1", Modifier.STATIC)
+    .addField(PrimitiveTypeName.FLOAT, "f1", Modifier.STATIC)
+    .addField(LocalDateTime.class, "dateTime", Modifier.PUBLIC, Modifier.STATIC)
+    .addField(ClassName.ofClass(LocalDate.class), "date")
+    .addField(ClassName.ofGuess(LocalTime.class.getCanonicalName()), "time")
+    .addField(ClassName.of("java.util", "Map", "Entry"), "entry")
+    .addField(TypeVariableName.of("K"), "k", Modifier.PRIVATE)
+    .addField(ParameterizedTypeName.of(List.class, TypeVariableName.of("K")), "ks", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.of()), "ks1", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofUpper(Serializable.class)), "ks2", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(List.class, WildcardTypeName.ofLower(Serializable.class)), "ks3", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), WildcardTypeName.of()), "map1", Modifier.PUBLIC)
+    .addField(ParameterizedTypeName.of(Map.class, ClassName.ofClass(String.class), ParameterizedTypeName.of(Map.class, ClassName.ofClass(Integer.class), WildcardTypeName.ofUpper(TypeVariableName.of("K")))), "map2", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(TypeVariableName.of("K")), "array1", Modifier.PUBLIC)
+    .addField(PrimitiveTypeName.INT, "intA", Modifier.PUBLIC)
+    .addField(Integer.class, "integerA", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT), "intArray", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofTypeName(ArrayTypeName.ofTypeName(PrimitiveTypeName.INT)), "intArrayArray", Modifier.PUBLIC)
+    .addField(ArrayTypeName.ofClass(Integer.class), "integerArray", Modifier.PUBLIC)
+    .addMethod(MethodSpec.builder(VoidTypeName.VOID, "method0", Modifier.PUBLIC, Modifier.ABSTRACT).build())
+    .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method1", Modifier.PROTECTED, Modifier.ABSTRACT)
+        .addTypeVariable(TypeVariableName.of("H"))
+        .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
+        .build())
+    .addMethod(MethodSpec.builder(TypeVariableName.of("H"), "method2", Modifier.PROTECTED, Modifier.ABSTRACT)
+        .addTypeVariable(TypeVariableName.of("H"))
+        .addTypeVariable(TypeVariableName.of("V"))
+        .addTypeVariable(TypeVariableName.of("E", Throwable.class))
+        .addParameter(TypeVariableName.of("K"), "k", Modifier.FINAL)
+        .addParameter(TypeVariableName.of("V"), "v", Modifier.FINAL)
+        .addThrowable(TypeVariableName.of("E"))
+        .build())
+    .build();
 ```
 
 And this is the generated output:
@@ -802,7 +813,6 @@ Here is an example of static imports:
 
 ```java
 ClassSpec classSpec = ClassSpec.builder("StaticImportDemo", Modifier.PUBLIC)
-    .addStaticImport(PrimitiveTypeName.class, "*")
     .addStaticImport(PrimitiveTypeName.BOOLEAN)
     .addStaticImport(PrimitiveTypeName.class, "INT", "LONG")
     .addStaticImport(ClassName.ofClass(PrimitiveTypeName.class), "CHAR", "DOUBLE")
@@ -813,11 +823,11 @@ And this is the generated output:
 
 ```java
 
-import static type.glz.hawk.poet.java.PrimitiveTypeName.BOOLEAN;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.CHAR;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.DOUBLE;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.INT;
-import static type.glz.hawk.poet.java.PrimitiveTypeName.LONG;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.BOOLEAN;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.CHAR;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.DOUBLE;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.INT;
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.LONG;
 
 public class StaticImportDemo {
 }
@@ -831,14 +841,14 @@ The supported types for definition are: classes, interfaces, enums, and annotati
 
 `FieldSpec` is responsible for maintaining the field's type, name, modifiers, annotations, initialization value, and
 javadoc.\
-Here is an example of FieldSpec usage:
+Here is an example of `FieldSpec` usage:
 
 ```java
 import glz.hawk.codepoet.java.ClassSpec;
 import glz.hawk.codepoet.java.FieldSpec;
 import glz.hawk.codepoet.java.JavaFile;
-import type.glz.hawk.poet.java.ArrayTypeName;
-import type.glz.hawk.poet.java.ParameterizedTypeName;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ParameterizedTypeName;
 
 import javax.annotation.Nonnull;
 
@@ -847,20 +857,20 @@ import java.util.Map;
 import static javax.lang.model.element.Modifier.*;
 
 FieldSpec fieldSpec1 = FieldSpec.builder(String.class, "name", PRIVATE)
-        .setJavadoc("This is a field javadoc example.")
-        .build();
+    .setJavadoc("This is a field javadoc example.")
+    .build();
 
 FieldSpec fieldSpec2 = FieldSpec.builder(ArrayTypeName.ofTypeName(INT), "numbers", PUBLIC, STATIC)
-        .setInitializer("new $T[]{$L, $L, $L}", INT, 1, 2, 3)
-        .addAnnotation(Nonnull.class)
-        .build();
+    .setInitializer("new $T[]{$L, $L, $L}", INT, 1, 2, 3)
+    .addAnnotation(Nonnull.class)
+    .build();
 
 ClassSpec classSpec = ClassSpec.builder("FieldDemo", PUBLIC)
-        .addField(fieldSpec1)
-        .addField(fieldSpec2)
-        .addField(ParameterizedTypeName.of(Map.class, String.class, Object.class), "map", PRIVATE)
-        .addField(String.class, "str2", PROTECTED)
-        .build();
+    .addField(fieldSpec1)
+    .addField(fieldSpec2)
+    .addField(ParameterizedTypeName.of(Map.class, String.class, Object.class), "map", PRIVATE)
+    .addField(String.class, "str2", PROTECTED)
+    .build();
 ```
 
 And this is the generated output:
@@ -886,15 +896,15 @@ but fields can also be directly added to a class definition via a shortcut metho
 the type, variable name, and modifiers.
 To define a static class variable, you need to add the `static` modifier.
 
-### Define ParameterSpecs
+### Define Parameters
 
 `ParameterSpec` is responsible for maintaining the type, name, annotations, and modifiers of a method or constructor
 parameter.\
-Here is an example of ParameterSpec usage:
+Here is an example of `ParameterSpec` usage:
 
 ```java
 
-import type.glz.hawk.poet.java.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
 
 import javax.annotation.Nonnull;
 
@@ -903,28 +913,28 @@ import static javax.lang.model.element.Modifier.*;
 ParameterSpec param1 = ParameterSpec.builder(String.class, "name").build();
 ParameterSpec param2 = ParameterSpec.builder(String.class, "unmodifiableName", FINAL).build();
 ParameterSpec param3 = ParameterSpec.builder(String.class, "simpleName")
-        .addAnnotation(Nonnull.class)
-        .build();
+    .addAnnotation(Nonnull.class)
+    .build();
 
 MethodSpec method1 = MethodSpec.builder(String.class, "search1", PUBLIC, ABSTRACT)
-        .addParameters(param1, param2, param3)
-        .build();
+    .addParameters(param1, param2, param3)
+    .build();
 
 MethodSpec method2 = MethodSpec.builder(String.class, "search2", PUBLIC, ABSTRACT)
-        .addParameter(String.class, "name", FINAL)
-        .build();
+    .addParameter(String.class, "name", FINAL)
+    .build();
 
 MethodSpec method3 = MethodSpec.builder(String.class, "search3", PUBLIC, ABSTRACT)
-        .addParameter(String.class, "firstName")
-        .addParameter(ArrayTypeName.ofClass(String.class), "names")
-        .varargs()
-        .build();
+    .addParameter(String.class, "firstName")
+    .addParameter(ArrayTypeName.ofClass(String.class), "names")
+    .varargs()
+    .build();
 
 ClassSpec classSpec = ClassSpec.builder("ParameterDemo", PUBLIC, ABSTRACT)
-        .addMethod(method1)
-        .addMethod(method2)
-        .addMethod(method3)
-        .build();
+    .addMethod(method1)
+    .addMethod(method2)
+    .addMethod(method3)
+    .build();
 ```
 
 And this is the generated output:
@@ -947,3 +957,695 @@ variable name, and modifiers.\
 To define a varargs parameter: the last parameter of the method must be an array,
 and you must also call `varargs()` to inform `MethodSpec` that the last parameter is a varargs parameter.
 
+## Define Methods
+
+`MethodSpec` is responsible for maintaining the return type, name, parameters, exceptions, modifiers, annotations,
+method body, and documentation of a method.\
+Here is an example of `MethodSpec` usage:
+
+```java
+MethodSpec method1 = MethodSpec.builder(VOID, "getValue", PUBLIC, ABSTRACT)
+    .addParameter(String.class, "key")
+    .build();
+
+MethodSpec method2 = MethodSpec.builder(INT, "sum", PUBLIC)
+    .addParameter(INT, "a")
+    .addParameter(INT, "b")
+    .beginMethodBody()
+    .addStatement("return a + b")
+    .end()
+    .build();
+
+MethodJavadoc methodJavadoc = MethodJavadoc.builder()
+    .addBlockTag(BlockTag.builder(BlockTagType.PARAM, "file").add("the file to be read.").build())
+    .addBlockTag(BlockTag.builder(BlockTagType.RETURN).add("the content of file.").build())
+    .addBlockTag(BlockTag.builder(IOException.class).add("if met error while read file").build())
+    .beginJavadoc()
+    .addDocument("read a file")
+    .end()
+    .build();
+
+MethodSpec method3 = MethodSpec.builder(String.class, "readFile", PUBLIC, ABSTRACT)
+    .addParameter(File.class, "file")
+    .addThrowable(IOException.class)
+    .setJavadoc(methodJavadoc)
+    .build();
+
+ClassSpec classSpec = ClassSpec.builder("MethodDemo", PUBLIC, ABSTRACT)
+    .addMethod(method1)
+    .addMethod(method2)
+    .addMethod(method3)
+    .build();
+```
+
+And this is the generated output:
+
+```java
+import java.io.File;
+import java.io.IOException;
+
+public abstract class MethodDemo {
+    public abstract void getValue(String key);
+
+    public int sum(int a, int b) {
+        return a + b;
+    }
+
+    /**
+     * read a file
+     *
+     * @param file the file to be read.
+     * @return the content of file.
+     * @throws IOException if met error while read file
+     */
+    public abstract String readFile(File file) throws IOException;
+}
+```
+
+## Define Constructors
+
+`ConstructorSpec` is responsible for maintaining the parameters, exceptions, modifiers, annotations, method body, and comments of a constructor.\
+Here is a usage example of `ConstructorSpec`:
+
+```java
+FieldSpec nameField = FieldSpec.builder(String.class, "name", PRIVATE).build();
+FieldSpec ageField = FieldSpec.builder(Integer.class, "age", PRIVATE).build();
+ConstructorSpec constructor1 = ConstructorSpec.builder(PUBLIC)
+    .addParameter(String.class, "name")
+    .addParameter(Integer.class, "age")
+    .beginConstructorBody()
+    .addStatement("this.name = name")
+    .addStatement(("this.age = age"))
+    .end()
+    .build();
+ConstructorSpec constructor2 = ConstructorSpec.builder(PUBLIC)
+    .beginConstructorBody()
+    .addStatement("this($S, $L)", "Hello World", 1)
+    .end()
+    .build();
+ClassSpec classSpec = ClassSpec.builder("ConstructorDemo", PUBLIC)
+    .addField(nameField)
+    .addField(ageField)
+    .addConstructor(constructor1)
+    .addConstructor(constructor2)
+    .build();
+```
+
+And this is the generated output:
+
+```java
+public class ConstructorDemo {
+    private String name;
+    private Integer age;
+
+    public ConstructorDemo(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public ConstructorDemo() {
+        this("Hello World", 1);
+    }
+}
+```
+
+### Define Interfaces
+
+`InterfaceSpec` is responsible for maintaining the interface's name, modifiers, type parameters, static nested classes, inner classes, superinterfaces, methods, annotations, and comments.\
+Here is a usage example of `InterfaceSpec`:
+
+```java
+InterfaceSpec interfaceSpec = InterfaceSpec.builder("IShape", Modifier.PUBLIC)
+    .addTypeVariable(TypeVariableName.of("T"))
+    .addSuperInterface(Serializable.class)
+    .addSuperInterface(Cloneable.class)
+    .addField(FieldSpec.builder(String.class, "type").setInitializer("$S", "SHAPE").build())
+    .addMethod(MethodSpec.builder(INT, "sidesCount").build())
+    .addMethod(MethodSpec.builder(INT, "interiorAngleSum", Modifier.DEFAULT)
+        .beginMethodBody()
+        .addStatement("return (sidesCount() - 2) * 180")
+        .end()
+        .build())
+    .build();
+```
+
+And this is the generated output:
+
+```java
+import java.io.Serializable;
+
+public interface IShape<T> extends Serializable, Cloneable {
+    String type = "SHAPE";
+
+    int sidesCount();
+
+    default int interiorAngleSum() {
+        return (sidesCount() - 2) * 180;
+    }
+}
+```
+
+### Define Classes
+
+`ClassSpec` is responsible for maintaining the class's name, modifiers, type parameters, static fields, instance fields,
+static initializers, instance initializers, inner classes, superclass, implemented interfaces, methods, constructors,
+annotations, and comments.\
+Here is a usage example of `ClassSpec`:
+
+```java
+package hawk.demo;
+
+import glz.hawk.codepoet.java.*;
+import glz.hawk.codepoet.java.type.ArrayTypeName;
+import glz.hawk.codepoet.java.type.ClassName;
+import glz.hawk.codepoet.java.type.ParameterizedTypeName;
+import hawk.util.ProjectUtils;
+
+import javax.lang.model.element.Modifier;
+import java.io.IOException;
+import java.util.function.Consumer;
+
+import static glz.hawk.codepoet.java.type.PrimitiveTypeName.INT;
+import static glz.hawk.codepoet.java.type.VoidTypeName.VOID;
+
+public class ClassGenerator {
+    private final String packageName;
+
+    public ClassGenerator(String packageName) {
+        this.packageName = packageName;
+    }
+
+    public void generateClass() {
+
+        // Mammal annotation
+        ProjectUtils.write(packageName,
+            AnnotationSpec.builder("Mammal", Modifier.PUBLIC)
+                .build()
+        );
+
+        // Mammal annotation
+        ProjectUtils.write(packageName,
+            AnnotationSpec.builder("Tag", Modifier.PUBLIC)
+                .build()
+        );
+
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            InterfaceSpec.builder("Movable", Modifier.PUBLIC)
+                .addMethod(MethodSpec.builder(INT, "getSpeed").build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType").build())
+                .build()
+        );
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            InterfaceSpec.builder("Audible", Modifier.PUBLIC)
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel").build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType").build())
+                .build()
+        );
+
+        // Movable interface
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Animal", Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addField(FieldSpec.builder(String.class, "animalType", Modifier.PRIVATE, Modifier.FINAL).build())
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .addParameter(String.class, "animalType")
+                    .beginConstructorBody()
+                    .addStatement("this.animalType = animalType")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getAnimalType", Modifier.PUBLIC)
+                    .beginMethodBody()
+                    .addStatement("return animalType")
+                    .end()
+                    .build())
+                .build()
+        );
+
+        // cat
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Cat", Modifier.PUBLIC)
+                .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Mammal")).build())
+                .setSuperClass(ClassName.of(packageName, "Animal"))
+                .addSuperInterfaces(ClassName.of(packageName, "Movable"), ClassName.of(packageName, "Audible"))
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .beginConstructorBody()
+                    .addStatement("super($S)", "CAT")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 55")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getSpeed", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 12")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "meow")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "walk")
+                    .end()
+                    .build())
+                .addInnerType(ClassSpec.builder("LittleCat")
+                        .addField(FieldSpec.builder(String.class, "COLOR", Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                            .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Tag")).build())
+                            .setInitializer("$S", "BLACK AND WHITE")
+                            .build())
+                        .addField(FieldSpec.builder(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")), "consumer")
+                            .setInitializer("$L", ClassSpec.anonymousBuilder()
+                                .setSuperClass(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")))
+                                .addMethod(MethodSpec.builder(VOID, "accept", Modifier.PUBLIC)
+                                    .addParameter(ClassName.of(packageName, "Cat"), "cat")
+                                    .beginMethodBody()
+                                    .addStatement("System.out.println(cat.getSpeed())")
+                                    .end()
+                                    .build())
+                                .build())
+                            .build())
+                        .addMethod(MethodSpec.builder(String.class, "favorite", Modifier.PUBLIC)
+                            .addParameter(String.class, "toyType")
+                            .addParameter(ArrayTypeName.ofClass(String.class), "toys")
+                            .varargs()
+                            .beginMethodBody()
+                            .addStatement("return toyType + $S + String.join($S, toys)", ": ", ", ")
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "save", Modifier.PUBLIC)
+                            .addThrowable(IOException.class)
+                            .beginMethodBody()
+                            .addStatement("throw new $T()", IOException.class)
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "playWith", Modifier.PUBLIC)
+                            .addParameter(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")), "consumer")
+                            .beginMethodBody()
+                            .addStatement("consumer.accept(new $T())", ClassName.of(packageName, "Cat"))
+                            .end()
+                            .build())
+                        .addMethod(MethodSpec.builder(VOID, "play", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("playWith($L)", ClassSpec.anonymousBuilder()
+                                .setSuperClass(ParameterizedTypeName.of(Consumer.class, ClassName.of(packageName, "Cat")))
+                                .addMethod(MethodSpec.builder(VOID, "accept", Modifier.PUBLIC)
+                                    .addParameter(ClassName.of(packageName, "Cat"), "cat")
+                                    .beginMethodBody()
+                                    .addStatement("System.out.println(cat.getSpeed())")
+                                    .end()
+                                    .build())
+                                .build())
+                            .end()
+                            .build())
+                        .build()
+                    , Modifier.PUBLIC, Modifier.STATIC)
+                .build()
+        );
+
+        // dog
+        ProjectUtils.write(packageName,
+            ClassSpec.builder("Dog", Modifier.PUBLIC)
+                .addAnnotation(AnnotationInstanceSpec.builder(ClassName.of(packageName, "Mammal")).build())
+                .setSuperClass(ClassName.of(packageName, "Animal"))
+                .addSuperInterfaces(ClassName.of(packageName, "Movable"), ClassName.of(packageName, "Audible"))
+                .addConstructor(ConstructorSpec.builder(Modifier.PUBLIC)
+                    .beginConstructorBody()
+                    .addStatement("super($S)", "DOG")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getVolumeLevel", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 25")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(INT, "getSpeed", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return 22")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getSoundType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "woof")
+                    .end()
+                    .build())
+                .addMethod(MethodSpec.builder(String.class, "getMovementType", Modifier.PUBLIC)
+                    .addAnnotation(Override.class)
+                    .beginMethodBody()
+                    .addStatement("return $S", "walk")
+                    .end()
+                    .build())
+                .build()
+        );
+    }
+}
+```
+
+And this is the generated output:
+
+```java
+public @interface Tag {
+}
+
+public @interface Mammal {
+}
+
+public interface Movable {
+    int getSpeed();
+
+    String getMovementType();
+}
+
+public interface Audible {
+    int getVolumeLevel();
+
+    String getSoundType();
+}
+
+abstract public class Animal {
+    private final String animalType;
+
+    public Animal(String animalType) {
+        this.animalType = animalType;
+    }
+
+    public String getAnimalType() {
+        return animalType;
+    }
+}
+
+@Mammal
+public class Dog extends Animal implements Movable, Audible {
+    public Dog() {
+        super("DOG");
+    }
+
+    @Override
+    public int getVolumeLevel() {
+        return 25;
+    }
+
+    @Override
+    public int getSpeed() {
+        return 22;
+    }
+
+    @Override
+    public String getSoundType() {
+        return "woof";
+    }
+
+    @Override
+    public String getMovementType() {
+        return "walk";
+    }
+}
+
+@Mammal
+public class Cat extends Animal implements Movable, Audible {
+    public Cat() {
+        super("CAT");
+    }
+
+    @Override
+    public int getVolumeLevel() {
+        return 55;
+    }
+
+    @Override
+    public int getSpeed() {
+        return 12;
+    }
+
+    @Override
+    public String getSoundType() {
+        return "meow";
+    }
+
+    @Override
+    public String getMovementType() {
+        return "walk";
+    }
+
+    static public class LittleCat {
+        @Tag
+        public final static String COLOR = "BLACK AND WHITE";
+        Consumer<Cat> consumer = new Consumer<Cat>() {
+            public void accept(Cat cat) {
+                System.out.println(cat.getSpeed());
+            }
+        };
+
+        public String favorite(String toyType, String... toys) {
+            return toyType + ": " + String.join(", ", toys);
+        }
+
+        public void save() throws IOException {
+            throw new IOException();
+        }
+
+        public void playWith(Consumer<Cat> consumer) {
+            consumer.accept(new Cat());
+        }
+
+        public void play() {
+            playWith(new Consumer<Cat>() {
+                public void accept(Cat cat) {
+                    System.out.println(cat.getSpeed());
+                }
+            });
+        }
+    }
+}
+```
+
+This example defines the annotations Tag and Mammal, the interfaces Movable and Audible, the abstract class Animal,
+and the final implementation classes Dog and Cat.
+The Cat class also includes an inner class LittleCat, demonstrating the implementation technique of an anonymous inner class.
+
+#### Define Initialization Blocks.
+
+`ClassSpec` provides the beginInstanceInitializer() method for writing the initialization block code for instance variables,
+and also provides the beginStaticInitializer() method for writing the initialization block code for static variables.\
+This is a usage example:
+
+```java
+ClassSpec classSpec = ClassSpec.builder("ClassDemo", PUBLIC)
+    .addField(String.class, "name", PRIVATE)
+    .addField(Integer.class, "age", PRIVATE)
+    .beginInstanceInitializer()
+    .addStatement("this.name = $S", "Dog")
+    .addStatement("this.age = 100")
+    .end()
+    .addField(Integer.class, "MAX_AGE", PRIVATE, STATIC)
+    .beginStaticInitializer()
+    .addStatement("MAX_AGE = 10000")
+    .end()
+    .build();
+```
+
+And this is the generated output:
+
+```java
+public class ClassDemo {
+    private String name;
+    private Integer age;
+    private static Integer MAX_AGE;
+
+    static {
+        MAX_AGE = 10000;
+    }
+
+    {
+        this.name = "Dog";
+        this.age = 100;
+    }
+}
+```
+
+### Define Enum
+
+`EnumSpec` is responsible for maintaining the enumeration's name, modifiers, enumerated constants, type variables,
+class variables, initialization blocks, inner classes, implemented interfaces, methods, constructors, annotations,
+and comments.\
+
+This is an example that generates the simplest enumeration class,
+containing only the enum constants and their corresponding javadoc.
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Speed", Modifier.PUBLIC)
+    .addEnumConstant("SLOW", ClassSpec.anonymousBuilder().setJavadoc("speed < 50 km/s").build())
+    .addEnumConstant("MEDIUM", ClassSpec.anonymousBuilder().setJavadoc("speed >= 50 km/s & speed < 00 km/s").build())
+    .addEnumConstant("FAST", ClassSpec.anonymousBuilder().setJavadoc("speed >= 50 km/s & speed < 00 km/s").build())
+    .build();
+```
+
+And this is the generated output:
+
+```java
+public enum Speed {
+    /**
+     * speed < 50 km/s
+     */
+    SLOW,
+    /**
+     * speed >= 50 km/s & speed < 00 km/s
+     */
+    MEDIUM,
+    /**
+     * speed >= 50 km/s & speed < 00 km/s
+     */
+    FAST
+}
+```
+
+This is an example of a generated enumeration class that includes enum constants,
+enum constant assignments, constructors, and public methods:
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Priority", Modifier.PUBLIC)
+    .addEnumConstant("HIGHEST", "$L, $S", 9, "highest")
+    .addEnumConstant("HIGH", "$L, $S", 7, "high")
+    .addEnumConstant("MEDIUM", "$L, $S", 5, "medium")
+    .addEnumConstant("LOW", "$L, $S", 3, "low")
+    .addEnumConstant("LOWEST", "$L, $S", 1, "lowest")
+    .addEnumConstant("OTHER", ClassSpec.anonymousBuilder("$L, $S", 0, "other").setJavadoc("Other").build())
+    .addField(String.class, "name", Modifier.FINAL)
+    .addField(int.class, "level", Modifier.FINAL)
+    .addConstructor(ConstructorSpec.builder()
+        .addParameter(INT, "level")
+        .addParameter(String.class, "name")
+        .beginConstructorBody()
+        .addStatement("this.name = name")
+        .addStatement("this.level = level")
+        .end()
+        .build())
+    .addMethod(MethodSpec.builder(String.class, "getName")
+        .beginMethodBody()
+        .addStatement("return name")
+        .end().build())
+    .addMethod(MethodSpec.builder(INT, "getLevel")
+        .beginMethodBody()
+        .addStatement("return level")
+        .end().build())
+    .build();
+```
+
+And this is the generated output:
+
+```java
+public enum Priority {
+    HIGHEST(9, "highest"),
+    HIGH(7, "high"),
+    MEDIUM(5, "medium"),
+    LOW(3, "low"),
+    LOWEST(1, "lowest"),
+    /**
+     * Other
+     */
+    OTHER(0, "other");
+
+    final String name;
+    final int level;
+
+    Priority(int level, String name) {
+        this.name = name;
+        this.level = level;
+    }
+
+    String getName() {
+        return name;
+    }
+
+    int getLevel() {
+        return level;
+    }
+}
+
+```
+
+This is an example that generates an enumeration class containing abstract methods and constructors:
+
+```java
+EnumSpec enumSpec = EnumSpec.builder("Shape", Modifier.PUBLIC)
+    .addEnumConstant("TRIANGLE",
+            ClassSpec.anonymousBuilder("$S", "triangle")
+                    .setJavadoc("The sum of the interior angles of a triangle is 180 degrees")
+                    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("return 3")
+                            .end().build())
+                    .build())
+    .addEnumConstant("RECTANGLE",
+            ClassSpec.anonymousBuilder("$S", "rectangle")
+                    .setJavadoc("The sum of the interior angles of a rectangle is 360 degrees")
+                    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC)
+                            .beginMethodBody()
+                            .addStatement("return 4")
+                            .end().build())
+                    .build())
+    .addField(String.class, "name", Modifier.FINAL)
+    .addConstructor(ConstructorSpec.builder()
+            .addParameter(String.class, "name")
+            .beginConstructorBody()
+            .addStatement("this.name = name")
+            .end()
+            .build())
+    .addMethod(MethodSpec.builder(String.class, "getName", Modifier.PUBLIC)
+            .beginMethodBody()
+            .addStatement("return name")
+            .end()
+            .build())
+    .addMethod(MethodSpec.builder(INT, "sidesCount", Modifier.PUBLIC, Modifier.ABSTRACT).build())
+    .build();
+```
+
+And this is the generated output:
+
+```java
+public enum Shape {
+    /**
+     * The sum of the interior angles of a triangle is 180 degrees
+     */
+    TRIANGLE("triangle") {
+        public int sidesCount() {
+            return 3;
+        }
+    },
+    /**
+     * The sum of the interior angles of a rectangle is 360 degrees
+     */
+    RECTANGLE("rectangle") {
+        public int sidesCount() {
+            return 4;
+        }
+    };
+
+    final String name;
+
+    Shape(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public abstract int sidesCount();
+}
+```
+
+### 定义注解

@@ -36,15 +36,13 @@ public abstract class AbstractDialectSupport implements DialectSupport {
         final List<ColumnSpec> columnSpecs = tableSpec.columnSpecs;
         final PrimaryKeySpec primaryKeySpec = tableSpec.primaryKeySpec;
         for (int i = 0; i < columnSpecs.size(); i++) {
-            createColumn(codeWriter, columnSpecs.get(i))
-                    .emit(i < columnSpecs.size() - 1 || primaryKeySpec != null, ",")
-                    .emitNewLine();
+            createColumn(codeWriter, columnSpecs.get(i)).emit(i < columnSpecs.size() - 1 || primaryKeySpec != null, ",").emitNewLine();
         }
         if (primaryKeySpec != null) {
             createPrimaryKey(codeWriter, primaryKeySpec).emitNewLine();
         }
         codeWriter.unindent();
-        codeWriter.emit(");");
+        codeWriter.emit(")");
         return codeWriter;
     }
 
@@ -58,8 +56,7 @@ public abstract class AbstractDialectSupport implements DialectSupport {
         codeWriter.emit("CONSTRAINT $L PRIMARY KEY (", primaryKeySpec.name);
         final List<IndexColumnSpec> indexColumnSpecs = primaryKeySpec.indexColumnSpecs;
         for (int i = 0; i < indexColumnSpecs.size(); i++) {
-            codeWriter.emit(indexColumnSpecs.get(i).name)
-                    .emit(i < indexColumnSpecs.size() - 1, ", ");
+            codeWriter.emit(indexColumnSpecs.get(i).name).emit(i < indexColumnSpecs.size() - 1, ", ");
         }
         codeWriter.emit(")");
         return codeWriter;
@@ -98,6 +95,8 @@ public abstract class AbstractDialectSupport implements DialectSupport {
         final int scale = dataTypeSpec.scale;
 
         switch (dataTypeSpec.type) {
+            case DataTypeSpec.PROVIDED_TYPE:
+                return dataTypeSpec.typeName;
             case Types.CHAR:
                 return String.format("CHAR(%d)", length);
             case Types.VARCHAR:

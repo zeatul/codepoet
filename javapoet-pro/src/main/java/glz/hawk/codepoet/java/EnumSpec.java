@@ -21,10 +21,11 @@ import glz.hawk.codepoet.java.type.TypeName;
 
 import javax.lang.model.element.Modifier;
 import java.lang.reflect.Type;
+import java.util.function.Consumer;
 
+import static glz.hawk.codepoet.java.TypeCategory.ENUM;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotBlank;
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
-import static glz.hawk.codepoet.java.TypeCategory.ENUM;
 
 /**
  * This class is responsible for
@@ -146,6 +147,11 @@ public class EnumSpec extends TypeSpec {
         @Override
         public EnumSpec.Builder addMethods(Iterable<MethodSpec> methodSpecs) {
             return super.addMethods(methodSpecs);
+        }
+
+        public EnumSpec.Builder add(Consumer<Builder> consumer) {
+            consumer.accept(this);
+            return this;
         }
 
         public EnumSpec build() {

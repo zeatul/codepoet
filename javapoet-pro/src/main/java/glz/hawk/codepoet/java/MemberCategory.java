@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 import static glz.hawk.codepoet.java.ModifierSupport.toUnmodifiedSet;
+import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
 /**
  * This class is responsible for

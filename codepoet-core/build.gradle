@@ -5,5 +5,5 @@ plugins {
 description = 'The foundation for all CodePoet modules.'
 
 dependencies {
-    implementation ("io.github.zeatul:hawk-core")
+    api("io.github.zeatul:hawk-core")
 }

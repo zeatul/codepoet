@@ -21,9 +21,7 @@ import glz.hawkframework.core.helper.ObjectHelper;
 import javax.annotation.Nonnull;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.TypeVariable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -75,8 +73,8 @@ public class TypeVariableName implements TypeName {
 
     @Nonnull
     @Override
-    public List<String> imports() {
-        List<String> imports = new ArrayList<>();
+    public Set<String> imports() {
+        Set<String> imports = new HashSet<>();
         bounds.stream().map(TypeName::imports).forEach(imports::addAll);
         return imports;
     }

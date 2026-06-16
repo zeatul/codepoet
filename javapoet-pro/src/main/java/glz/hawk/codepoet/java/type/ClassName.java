@@ -26,6 +26,7 @@ import javax.lang.model.util.SimpleElementVisitor8;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static glz.hawkframework.core.support.ArgumentSupport.*;
 
@@ -174,7 +175,7 @@ public class ClassName implements TypeName {
 
     @Nonnull
     @Override
-    public List<String> imports() {
-        return Collections.singletonList(canonicalName);
+    public Set<String> imports() {
+        return Collections.singleton(canonicalName);
     }
 }

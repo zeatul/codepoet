@@ -19,8 +19,8 @@ import glz.hawk.codepoet.java.javadoc.Javadoc.Location;
 
 import java.util.*;
 
-import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 import static glz.hawk.codepoet.java.javadoc.Javadoc.Location.*;
+import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
 /**
  * This enum is responsible for

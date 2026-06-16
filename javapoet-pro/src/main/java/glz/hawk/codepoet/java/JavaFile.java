@@ -16,11 +16,11 @@
 
 package glz.hawk.codepoet.java;
 
+import glz.hawk.codepoet.java.javadoc.FileJavadoc;
+import glz.hawk.codepoet.java.type.AlwaysQualifiedNamesHolder;
 import glz.hawkframework.core.helper.ObjectHelper;
 import glz.hawkframework.core.helper.StringHelper;
 import glz.hawkframework.core.support.LogicOptional;
-import glz.hawk.codepoet.java.javadoc.FileJavadoc;
-import glz.hawk.codepoet.java.type.AlwaysQualifiedNamesHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

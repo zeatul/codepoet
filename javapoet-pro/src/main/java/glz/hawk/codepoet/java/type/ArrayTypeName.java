@@ -18,7 +18,7 @@ package glz.hawk.codepoet.java.type;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Type;
-import java.util.List;
+import java.util.Set;
 
 import static glz.hawkframework.core.support.ArgumentSupport.argNotNull;
 
@@ -58,7 +58,7 @@ public class ArrayTypeName implements TypeName {
 
     @Nonnull
     @Override
-    public List<String> imports() {
+    public Set<String> imports() {
         return componentTypeName.imports();
     }
 }
