@@ -97,7 +97,7 @@ public class SqlFile {
         writeTo(argNotNull(directory, "directory").toPath());
     }
 
-    public Path resolveOutputPath(@Nonnull Path path, boolean createDirectory) {
+    private Path resolveOutputPath(@Nonnull Path path, boolean createDirectory) {
         argNotNull(path, "path");
         argument(path, Files::exists, this::messageForPathNotExist);
         argument(path, Files::isDirectory, this::messageForPathIsNotDirectory);

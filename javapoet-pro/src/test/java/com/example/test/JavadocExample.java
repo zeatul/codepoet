@@ -23,6 +23,7 @@ import java.util.Map;
  * @author Hawk
  */
 public class JavadocExample<K, V> {
+
     /**
      * My name is Wanted
      *  

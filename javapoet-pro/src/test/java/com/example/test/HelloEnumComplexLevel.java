@@ -6,6 +6,7 @@ enum HelloEnumComplexLevel {
     A("namedAAA"),
     B("namedBBB");
 
+
     final private String name;
 
     HelloEnumComplexLevel(String name) {

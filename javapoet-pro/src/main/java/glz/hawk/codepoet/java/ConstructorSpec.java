@@ -23,6 +23,7 @@ import glz.hawk.codepoet.java.type.TypeName;
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static glz.hawkframework.core.support.ArgumentSupport.argument;
 
@@ -63,6 +64,11 @@ public class ConstructorSpec extends ExecutorSpec<ConstructorJavadoc> {
         @Override
         public Builder addParameter(ParameterSpec parameterSpec) {
             return super.addParameter(parameterSpec);
+        }
+
+        @Override
+        public Builder addParameter(Supplier<ParameterSpec> parameterSpecSupplier){
+            return super.addParameter(parameterSpecSupplier);
         }
 
         @Override

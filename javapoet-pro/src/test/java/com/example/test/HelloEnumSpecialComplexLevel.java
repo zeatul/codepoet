@@ -24,6 +24,7 @@ public enum HelloEnumSpecialComplexLevel {
         }
     };
 
+
     final private String name;
 
     HelloEnumSpecialComplexLevel(String name) {

@@ -38,7 +38,9 @@ public class TableSpec {
     public final PrimaryKeySpec primaryKeySpec;
     public final List<ColumnSpec> columnSpecs;
     public final List<IndexSpec> indexSpecs;
-    public final List<String> suffixes ; // 在表定义语句的末尾提供额外的属性
+    public final List<String> suffixes; // 在表定义语句的末尾提供额外的属性
+    public final boolean isCreateTitle; // 是否创建表的title描述
+    public final boolean isCreateDrop; // 是否创建表的drop语句
 
 
     private TableSpec(Builder builder) {
@@ -47,7 +49,9 @@ public class TableSpec {
         this.primaryKeySpec = builder.primaryKeySpec;
         this.columnSpecs = Collections.unmodifiableList(builder.columnSpecs);
         this.indexSpecs = Collections.unmodifiableList(builder.indexSpecs);
-        this. suffixes = Collections.unmodifiableList(builder.suffixes);
+        this.suffixes = Collections.unmodifiableList(builder.suffixes);
+        this.isCreateDrop = builder.isCreateDrop;
+        this.isCreateTitle = builder.isCreateTitle;
     }
 
     public static Builder builder(String name) {
@@ -55,17 +59,24 @@ public class TableSpec {
     }
 
     void emit(DatabaseCodeWriter codeWriter) throws IOException {
-        //create a title
-        String tag = "==============================================================";
-        codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
-        String title = String.format(" Table: %s", name);
-        codeWriter.emit("/*").emit(title).emit(StringHelper.repeatChar(' ', tag.length() - title.length())).emit("*/").emitNewLine();
-        codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
 
-        //drop table
-        codeWriter.dialectSupport.dropTable(codeWriter, this).emitNewLine();
+        if (isCreateTitle) {
+            //create a title
+            String tag = "==============================================================";
+            codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
+            String title = String.format(" Table: %s", name);
+            codeWriter.emit("/*").emit(title).emit(StringHelper.repeatChar(' ', tag.length() - title.length())).emit("*/").emitNewLine();
+            codeWriter.emit("/*").emit(tag).emit("*/").emitNewLine();
+        }
 
-        codeWriter.emitNewLine();
+        if (isCreateDrop) {
+            //drop table
+            codeWriter.dialectSupport.dropTable(codeWriter, this).emitNewLine();
+        }
+        if (isCreateTitle || isCreateDrop) {
+            codeWriter.emitNewLine();
+        }
+
         //create table
         codeWriter.dialectSupport.createTable(codeWriter, this).emitNewLine();
 
@@ -101,6 +112,8 @@ public class TableSpec {
         private String comment;
         private PrimaryKeySpec primaryKeySpec;
         private final List<String> suffixes = new ArrayList<>();
+        private boolean isCreateTitle = true; // 是否创建表的title描述
+        public boolean isCreateDrop = true;
 
         private Builder(String name) {
             //TODO:校验表的名字是否符合sql规范
@@ -152,6 +165,16 @@ public class TableSpec {
 
         public Builder addSuffixes(List<String> suffixes) {
             this.suffixes.addAll(argNoBlankElement(suffixes, "suffixes"));
+            return this;
+        }
+
+        public Builder setCreateTitle(boolean isCreateTitle) {
+            this.isCreateTitle = isCreateTitle;
+            return this;
+        }
+
+        public Builder setCreateDrop(boolean isCreateDrop) {
+            this.isCreateDrop = isCreateDrop;
             return this;
         }
 

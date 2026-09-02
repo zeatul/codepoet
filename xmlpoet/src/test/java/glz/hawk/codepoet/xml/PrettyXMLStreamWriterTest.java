@@ -16,7 +16,7 @@
 
 package glz.hawk.codepoet.xml;
 
-import glz.hawkframework.core.helper.FileReadHelper;
+import glz.hawkframework.core.helper.FileHelper;
 import org.junit.jupiter.api.Test;
 
 import java.io.StringWriter;
@@ -50,7 +50,7 @@ public class PrettyXMLStreamWriterTest {
         writer.writeEndElement();
         writer.writeEndDocument();
         writer.close();
-        assertThat(sw.toString()).isEqualTo(FileReadHelper.readAllText("/glz/hawk/codepoet/xml/test1.xml").trim());
+        assertThat(sw.toString()).isEqualTo(FileHelper.readAllText("/glz/hawk/codepoet/xml/test1.xml").trim());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class PrettyXMLStreamWriterTest {
         writer.writeEndElement();
         writer.writeEndDocument();
         writer.close();
-        assertThat(sw.toString()).isEqualTo(FileReadHelper.readAllText("/glz/hawk/codepoet/xml/test2.xml").trim());
+        assertThat(sw.toString()).isEqualTo(FileHelper.readAllText("/glz/hawk/codepoet/xml/test2.xml").trim());
     }
 
 }

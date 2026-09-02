@@ -27,6 +27,7 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static glz.hawkframework.core.support.ArgumentSupport.*;
 import static glz.hawkframework.core.support.LogicSupport.consumeIfNotNull;
@@ -184,7 +185,6 @@ public abstract class ExecutorSpec<K extends Javadoc> extends MemberSpec<K> {
             return (T) this;
         }
 
-
         public T addTypeVariables(Iterable<TypeVariableName> typeVariableNames) {
             int index = -1;
             for (TypeVariableName typeVariableName : argNotNull(typeVariableNames, "typeVariableNames")) {
@@ -209,6 +209,12 @@ public abstract class ExecutorSpec<K extends Javadoc> extends MemberSpec<K> {
 
         protected T addParameter(ParameterSpec parameterSpec) {
             this.parameters.add(argNotNull(parameterSpec, "parameterSpec"));
+            return (T) this;
+        }
+
+        protected T addParameter(Supplier<ParameterSpec> parameterSpecSupplier){
+            ParameterSpec parameterSpec = argNotNull(parameterSpecSupplier, "parameterSpecSupplier").get();
+            if (parameterSpec != null) addParameter(parameterSpec);
             return (T) this;
         }
 
